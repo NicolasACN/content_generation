@@ -87,7 +87,7 @@ The Content Generation App helps you create structured content using predefined 
 
 ---
 
-## 🖥️ App Tabs
+## 🖥️ How To Use The App ?
 
 ### 1. Project Setup
 

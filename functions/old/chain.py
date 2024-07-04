@@ -497,6 +497,7 @@ def make_writing_chain(model, bloc_structure_model, prompt_folder):
     
     prompt_folder = os.path.join(prompt_folder, "Copywriting")
     assert os.path.exists(prompt_folder)
+    
     writing_system_message_prompt, writing_human_message_prompt = load_prompts(prompt_folder)
     
     prompt = ChatPromptTemplate(
@@ -510,7 +511,7 @@ def make_writing_chain(model, bloc_structure_model, prompt_folder):
     writing_chain = prompt | model | parser
     return writing_chain
 
-def make_rewriting_chain(model, bloc_structure_model):
+def make_rewriting_chain(model, bloc_structure_model, prompt_folder):
     
     parser = JsonOutputParser(pydantic_object=bloc_structure_model)
     

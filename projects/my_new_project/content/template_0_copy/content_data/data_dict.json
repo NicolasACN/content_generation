@@ -1,0 +1,22 @@
+{
+    "offer_name": {
+        "value": "SUMMER ENA",
+        "description": "Name of the offer"
+    },
+    "offer_description": {
+        "value": "20% off if booked before july 10th",
+        "description": "description of the offer"
+    },
+    "offer_type": {
+        "value": "promo",
+        "description": "type of the offer"
+    },
+    "offer_usp": {
+        "value": "20% off cancelation free",
+        "description": "unique selling point"
+    },
+    "offer_highlight": {
+        "value": "summer exclusive",
+        "description": "highlight of the offer"
+    }
+}

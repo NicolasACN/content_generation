@@ -3,16 +3,13 @@ import json
 import os
 import shutil
 from functions.old.data_processing import make_bloc_structure, fill_hotel_data
-# from functions.custom_generation import choose_model, generate_content
-from functions.utils import choose_model
-from functions.utils import dict_to_markdown
-# from functions.chain import make_simple_harmonizer_chain
+from functions.utils import choose_model, dict_to_markdown
 
 # App name and header
 st.title("Content Generation")
 
 # Tabs for project setup and data upload
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Project Setup", "Data", "Structure", "Data Factory", "Content Generation"])
+tab1, tab2, tab3 = st.tabs(["Project Setup", "Data", "Content Generation"])
 
 # Initialize session state variables
 if "project_name" not in st.session_state:
@@ -35,6 +32,8 @@ if 'data_dict' not in st.session_state:
     st.session_state['data_dict'] = {}
 if 'filled_data' not in st.session_state:
     st.session_state['filled_data'] = {}
+if 'generated_content' not in st.session_state:
+    st.session_state['generated_content'] = {}
 
 # Function to create project directory structure
 def create_project_structure(project_name, project_brief):
@@ -46,7 +45,8 @@ def create_project_structure(project_name, project_brief):
         "data/product_data",
         "data/reference_examples",
         "data/project_info",
-        "prompts"
+        "prompts",
+        "content"  # Create content folder as part of project creation
     ]
 
     for folder in folders:
@@ -81,6 +81,13 @@ def load_project_details(project_name):
         st.success(f"Project '{project_name}' loaded successfully!")
     except Exception as e:
         st.error(f"Error loading project details: {e}")
+
+# Function to setup content template
+def setup_content_template(template_name, content_templates_path):
+    new_template_path = os.path.join(content_templates_path, template_name)
+    os.makedirs(new_template_path, exist_ok=True)
+    os.makedirs(os.path.join(new_template_path, "content_data"), exist_ok=True)
+    return new_template_path
 
 with tab1:
     st.header("Project Setup")
@@ -151,168 +158,221 @@ with tab2:
         else:
             st.error("Please upload reference examples files first.")
 
-# Tab 3: Structure
+# New Tab 3: Content Generation
 with tab3:
-    st.header("Create Content Structure")
+    st.header("Content Generation")
     
-    # Loading a predefined structure
-    st.subheader("Import a predefined structure")
-    uploaded_file = st.file_uploader("Upload a content structure JSON file", type="json")
-    if uploaded_file is not None:
-        try:
-            content_structure = json.load(uploaded_file)
-            st.session_state['structure_dict'] = content_structure
-            st.success("JSON file loaded successfully!")
-        except json.JSONDecodeError:
-            st.error("Failed to decode JSON file. Please upload a valid JSON file.")  
-              
-    # Create or edit the structure
-    st.subheader("Add Pages")
-    with st.form("add_page_form"):
-        page_name = st.text_input("Enter new page name", key="page_input")
-        submitted = st.form_submit_button("Add new page")
-        if submitted and page_name:
-            st.session_state['structure_dict'][page_name] = {}
-            st.success(f"Page '{page_name}' added")
+    # Section for selecting or creating a content template
+    with st.expander("Select or Create Content Template", expanded=True):
+        # Path for the content templates
+        if st.session_state.project_name:
+            content_templates_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "content")
+        else:
+            content_templates_path = ""
+        
+        if content_templates_path and not os.path.exists(content_templates_path):
+            os.makedirs(content_templates_path, exist_ok=True)
+        
+        if content_templates_path:
+            # List existing templates
+            content_templates = [d for d in os.listdir(content_templates_path) if os.path.isdir(os.path.join(content_templates_path, d))]
+            content_templates.append("Create New Template")  # Option to create a new template
 
-    st.subheader("Add Sections")
-    if st.session_state['structure_dict']:
-        with st.form("add_section_form"):
-            selected_page = st.selectbox("Select a page to add sections and elements", list(st.session_state['structure_dict'].keys()))
-            section_name = st.text_input("Enter new section name")
-            submitted = st.form_submit_button("Add new section")
-            if submitted and section_name:
-                if selected_page and section_name:
-                    st.session_state['structure_dict'][selected_page][section_name] = {
-                        'bloc_guidelines': {},
-                        'bloc_data': {},
-                        'bloc_structure_string': {}
-                    }
-                    st.success(f"Section '{section_name}' added under page '{selected_page}'")
-    else:
-        st.write("Please add a page before adding sections.")
+            selected_template = st.selectbox("Select an existing content template or create a new one", content_templates)
+        
+            if selected_template == "Create New Template":
+                new_template_name = st.text_input("Enter new template name")
+                create_template_button = st.button("Create Template")
+                if create_template_button and new_template_name:
+                    new_template_path = setup_content_template(new_template_name, content_templates_path)
+                    
+                    # Create empty JSON files
+                    with open(os.path.join(new_template_path, 'content_data', 'content_structure.json'), 'w') as f:
+                        json.dump({}, f)
+                    with open(os.path.join(new_template_path, 'content_data', 'data_dict.json'), 'w') as f:
+                        json.dump({}, f)
+                    
+                    st.success(f"Template '{new_template_name}' created successfully!")
+                    st.session_state['structure_dict'] = {}  # Clear the structure dictionary for new template
+                    st.session_state['data_dict'] = {}  # Clear the data dictionary for new template
+            else:
+                load_template_button = st.button("Load Template")
+                if load_template_button:
+                    # Load the selected template
+                    template_path = os.path.join(content_templates_path, selected_template)
+                    try:
+                        if os.path.exists(os.path.join(template_path, 'content_data', 'content_structure.json')):
+                            with open(os.path.join(template_path, 'content_data', 'content_structure.json'), 'r') as f:
+                                st.session_state['structure_dict'] = json.load(f)
+                        if os.path.exists(os.path.join(template_path, 'content_data', 'data_dict.json')):
+                            with open(os.path.join(template_path, 'content_data', 'data_dict.json'), 'r') as f:
+                                st.session_state['data_dict'] = json.load(f)
+                        st.success(f"Template '{selected_template}' loaded successfully!")
+                    except Exception as e:
+                        st.error(f"Error loading template '{selected_template}': {e}")
 
-    st.subheader("Add Elements")
-    if st.session_state['structure_dict']:
-        with st.form("add_element_form", clear_on_submit=True):
+    # Structure Section
+    with st.expander("Create Content Structure", expanded=False):
+        # Loading a predefined structure
+        st.subheader("Import a predefined structure")
+        if content_templates_path:
+            templates = [d for d in os.listdir(content_templates_path) if os.path.isdir(os.path.join(content_templates_path, d))]
+            selected_template_for_import = st.selectbox("Select a template folder", templates)
+            import_structure_button = st.button("Load Structure")
+            if import_structure_button:
+                try:
+                    template_path = os.path.join(content_templates_path, selected_template_for_import)
+                    if os.path.exists(os.path.join(template_path, 'content_data', 'content_structure.json')):
+                        with open(os.path.join(template_path, 'content_data', 'content_structure.json'), 'r') as f:
+                            st.session_state['structure_dict'] = json.load(f)
+                    if os.path.exists(os.path.join(template_path, 'content_data', 'data_dict.json')):
+                        with open(os.path.join(template_path, 'content_data', 'data_dict.json'), 'r') as f:
+                            st.session_state['data_dict'] = json.load(f)
+                    st.success(f"Structure and data loaded successfully from '{selected_template_for_import}'!")
+                except Exception as e:
+                    st.error(f"Error loading structure and data from '{selected_template_for_import}': {e}")
+                
+        # Create or edit the structure
+        st.subheader("Add Pages")
+        with st.form("add_page_form"):
+            page_name = st.text_input("Enter new page name", key="page_input")
+            submitted = st.form_submit_button("Add new page")
+            if submitted and page_name:
+                st.session_state['structure_dict'][page_name] = {}
+                st.success(f"Page '{page_name}' added")
+
+        st.subheader("Add Sections")
+        if st.session_state['structure_dict']:
+            with st.form("add_section_form"):
+                selected_page = st.selectbox("Select a page to add sections and elements", list(st.session_state['structure_dict'].keys()), key="section_page_select")
+                section_name = st.text_input("Enter new section name")
+                submitted = st.form_submit_button("Add new section")
+                if submitted and section_name:
+                    if selected_page and section_name:
+                        st.session_state['structure_dict'][selected_page][section_name] = {
+                            'bloc_guidelines': {},
+                            'bloc_data': {},
+                            'bloc_structure_string': {}
+                        }
+                        st.success(f"Section '{section_name}' added under page '{selected_page}'")
+        else:
+            st.write("Please add a page before adding sections.")
+
+        st.subheader("Add Elements")
+        if st.session_state['structure_dict']:
             page_list = list(st.session_state['structure_dict'].keys())
             selected_page = st.selectbox("Select a page", page_list, key="element_page_select")
-            section_list = []
+
             if selected_page:
                 section_list = list(st.session_state['structure_dict'][selected_page].keys())
-            selected_section = st.selectbox("Select a section", section_list, key="element_section_select")
-            element_name = st.text_input("New element name")
-            nb_characters = st.text_input("Max number of characters")
-            content_guidelines = st.text_area("What is the content about ?")
-            reference_content = st.text_area("Example content")
-            data = st.text_input("Add data")
-            submitted_element = st.form_submit_button("Add new element")
-            if submitted_element and element_name and selected_section:
-                element_info = {
-                    "nb_characters": nb_characters,
-                    "content_guidelines": content_guidelines,
-                    "reference_content": reference_content
-                }
-                # Add to bloc guidelines
-                st.session_state['structure_dict'][selected_page][selected_section]['bloc_guidelines'][element_name] = element_info
-                # Add to bloc data
-                if data:
-                    data_list = [elt.strip(' ') for elt in data.split(',')]
-                    for data_element in data_list:
-                        if data_element and data_element not in st.session_state['structure_dict'][selected_page][selected_section]['bloc_data']:
-                            st.session_state['structure_dict'][selected_page][selected_section]['bloc_data'][data_element] = {}
-                            if not data_element in st.session_state['data_dict']:
-                                st.session_state['data_dict'][data_element] = {}
-                # Add bloc structure string
-                st.session_state['structure_dict'][selected_page][selected_section]['bloc_structure_string'] = make_bloc_structure(st.session_state['structure_dict'][selected_page][selected_section]['bloc_guidelines'])
+                selected_section = st.selectbox("Select a section", section_list, key="element_section_select")
 
-                st.success(f"Element '{element_name}' added under section '{selected_section}'")
+                with st.form("add_element_form", clear_on_submit=True):
+                    element_name = st.text_input("New element name")
+                    nb_characters = st.text_input("Max number of characters")
+                    content_guidelines = st.text_area("What is the content about?")
+                    reference_content = st.text_area("Example content")
+                    data = st.text_input("Add data")
+                    submitted_element = st.form_submit_button("Add new element")
+                    if submitted_element and element_name and selected_section:
+                        element_info = {
+                            "nb_characters": nb_characters,
+                            "content_guidelines": content_guidelines,
+                            "reference_content": reference_content
+                        }
+                        # Add to bloc guidelines
+                        st.session_state['structure_dict'][selected_page][selected_section]['bloc_guidelines'][element_name] = element_info
+                        # Add to bloc data
+                        if data:
+                            data_list = [elt.strip(' ') for elt in data.split(',')]
+                            for data_element in data_list:
+                                if data_element and data_element not in st.session_state['structure_dict'][selected_page][selected_section]['bloc_data']:
+                                    st.session_state['structure_dict'][selected_page][selected_section]['bloc_data'][data_element] = {}
+                                    if not data_element in st.session_state['data_dict']:
+                                        st.session_state['data_dict'][data_element] = {}
+                        # Add bloc structure string
+                        st.session_state['structure_dict'][selected_page][selected_section]['bloc_structure_string'] = make_bloc_structure(st.session_state['structure_dict'][selected_page][selected_section]['bloc_guidelines'])
 
-    st.subheader("Debug")
-    st.write("Current Structure Dictionary:", st.session_state['structure_dict'])
-    st.write("Current Data Dictionary:", st.session_state['data_dict'])
+                        st.success(f"Element '{element_name}' added under section '{selected_section}'")
 
-# Tab 4: Data Factory
-with tab4:
-    st.header("Data Factory")
-    
-    st.subheader("Import existing data")
-    uploaded_file = st.file_uploader("Upload existing data as JSON file", type="json")
-    if uploaded_file is not None:
-        try:
-            existing_data = json.load(uploaded_file)
-            st.session_state['data_dict'] = existing_data
-            st.success("JSON file loaded successfully!")
-        except json.JSONDecodeError:
-            st.error("Failed to decode JSON file. Please upload a valid JSON file.") 
-            
-    for data in list(st.session_state['data_dict'].keys()):
-        with st.form(f"data_form_{data}"):
-            # Create fields to enter value and description
-            value = st.text_input(f"Value for {data}", key=f"value_{data}")
-            description = st.text_area(f"Description for {data}", key=f"description_{data}")
-            # Submit button for each form
-            submitted = st.form_submit_button(f"Save {data}")
-            if submitted:
-                st.session_state['data_dict'][data]['value'] = value
-                st.session_state['data_dict'][data]['description'] = description
-                st.success(f"Data for {data} saved!")
-    
-    st.subheader("Debug")
-    st.write("Current Data Dictionary:", st.session_state['data_dict'])
-    
-    # Saving the dictionaries
-    with st.sidebar:
-        st.header("Save Data")
-        built_data_path = os.path.join(os.getcwd(), 'data', 'built_data')
-        os.makedirs(built_data_path, exist_ok=True)
-        
-        if st.button("Save Data Structures"):
-            if built_data_path:
-                # Save structure dictionary
-                with open(os.path.join(built_data_path, 'template', 'hotel_data_template.json'), 'w') as f:
-                    json.dump(st.session_state['structure_dict'], f, indent=4)
-                # Save data dictionary
-                with open(os.path.join(built_data_path, 'data_dict', 'data_dict.json'), 'w') as f:
-                    json.dump(st.session_state['data_dict'], f, indent=4)
+        if st.button("Save Structure"):
+            template_path = os.path.join(content_templates_path, selected_template if selected_template != "Create New Template" else new_template_name)
+            # Save structure dictionary
+            with open(os.path.join(template_path, 'content_data', 'content_structure.json'), 'w') as f:
+                json.dump(st.session_state['structure_dict'], f, indent=4)
+            # Save data dictionary
+            with open(os.path.join(template_path, 'content_data', 'data_dict.json'), 'w') as f:
+                json.dump(st.session_state['data_dict'], f, indent=4)
+            st.success(f"Structure and data saved successfully at {template_path}/content_data/content_structure.json and {template_path}/content_data/data_dict.json")
+
+    st.markdown("---")  # Separator
+
+    # Data Factory Section
+    with st.expander("Data Factory", expanded=False):
+        st.subheader("Import existing data")
+        uploaded_file = st.file_uploader("Upload existing data as JSON file", type="json")
+        if uploaded_file is not None:
+            try:
+                existing_data = json.load(uploaded_file)
+                st.session_state['data_dict'] = existing_data
+                st.success("JSON file loaded successfully!")
+            except json.JSONDecodeError:
+                st.error("Failed to decode JSON file. Please upload a valid JSON file.") 
                 
-                # Fill data and save it
-                st.session_state['filled_data'] = fill_hotel_data(st.session_state['structure_dict'], st.session_state['data_dict'])
-                with open(os.path.join(built_data_path, 'filled_data', 'filled_data.json'), "w") as f:
-                    json.dump(st.session_state['filled_data'], f, indent=4)
-                st.success(f"Files saved successfully at {built_data_path}")
+        for data in list(st.session_state['data_dict'].keys()):
+            with st.form(f"data_form_{data}"):
+                # Create fields to enter value and description
+                value = st.text_input(f"Value for {data}", key=f"value_{data}")
+                description = st.text_area(f"Description for {data}", key=f"description_{data}")
+                # Submit button for each form
+                submitted = st.form_submit_button(f"Save {data}")
+                if submitted:
+                    st.session_state['data_dict'][data]['value'] = value
+                    st.session_state['data_dict'][data]['description'] = description
+                    st.success(f"Data for {data} saved!")
+        
+        if st.button("Save Content Data"):
+            template_path = os.path.join(content_templates_path, selected_template if selected_template != "Create New Template" else new_template_name)
+            # Save data dictionary
+            with open(os.path.join(template_path, 'content_data', 'data_dict.json'), 'w') as f:
+                json.dump(st.session_state['data_dict'], f, indent=4)
+            
+            # Fill data and save it
+            st.session_state['filled_data'] = fill_hotel_data(st.session_state['structure_dict'], st.session_state['data_dict'])
+            filled_data_path = os.path.join(template_path, 'content_data', 'filled_data.json')
+            with open(filled_data_path, "w") as f:
+                json.dump(st.session_state['filled_data'], f, indent=4)
+            st.success(f"Content data saved successfully at {filled_data_path}")
 
-# Tab 5: Content Generation
-with tab5:
-    st.header("Content Generation")
-    if st.session_state['filled_data'] == {}:
-        st.warning("No filled data available. Please go to the Structure tab and save data structures first.")
-    else:
-        if st.button("Generate Content"):
-            # Assuming generate_content takes filled data and returns content
-            model = choose_model("4-turbo")
-            generated_content = generate_content(st.session_state['filled_data'], model=model)
-            st.session_state['generated_content'] = generated_content
-            # format and print content
-            formated_content = dict_to_markdown(generated_content)
-            
-            # # Harmonize Content
-            # with open(os.path.join(os.getcwd(), "data", "experiments", "cw_guidelines", "cw_guidelines.txt"), "r") as f:
-            #     cw_guidelines = f.read()
-            # harmonizer = make_simple_harmonizer_chain(model)
-            # harmonized_content = harmonizer.invoke({"input_text": formated_content, "cw_guidelines": cw_guidelines})
-            # st.markdown(harmonized_content)
-            
-            st.markdown(formated_content)
-            
-        if 'generated_content' in st.session_state and st.session_state['generated_content']:
-            # Folder selection and saving content
-            st.subheader("Save Generated Content")
-            save_path = st.text_input("Enter the folder path to save the content", key="save_folder")
-            if st.button("Save Content"):
-                if save_path:
-                    if not os.path.exists(save_path):
-                        os.makedirs(save_path, exist_ok=True)
-                    with open(os.path.join(save_path, 'generated_content.json'), 'w') as f:
-                        json.dump(st.session_state['generated_content'], f, indent=4)
-                    st.success(f"Content saved successfully in {save_path}")
+    # Content Generation Section
+    with st.expander("Generate Content", expanded=False):
+        if st.session_state['filled_data'] == {}:
+            st.warning("No filled data available. Please go to the Structure section and save data structures first.")
+        else:
+            if st.button("Generate Content"):
+                # Assuming generate_content takes filled data and returns content
+                model = choose_model("4-turbo")
+                generated_content = generate_content(st.session_state['filled_data'], model=model)
+                st.session_state['generated_content'] = generated_content
+                # format and print content
+                formated_content = dict_to_markdown(generated_content)
+                st.markdown(formated_content)
+                
+            if 'generated_content' in st.session_state and st.session_state['generated_content']:
+                # Folder selection and saving content
+                st.subheader("Save Generated Content")
+                save_path = st.text_input("Enter the folder path to save the content", key="save_folder")
+                if st.button("Save Content"):
+                    if save_path:
+                        if not os.path.exists(save_path):
+                            os.makedirs(save_path, exist_ok=True)
+                        with open(os.path.join(save_path, 'generated_content.json'), 'w') as f:
+                            json.dump(st.session_state['generated_content'], f, indent=4)
+                        st.success(f"Content saved successfully in {save_path}")
+
+    # Debug Section
+    with st.expander("Debug", expanded=False):
+        st.subheader("Current Structure Dictionary")
+        st.write(st.session_state['structure_dict'])
+        st.subheader("Current Data Dictionary")
+        st.write(st.session_state['data_dict'])

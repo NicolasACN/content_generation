@@ -1,0 +1,89 @@
+{
+    "CRM": {
+        "MAIN OFFER CRM": {
+            "bloc_guidelines": {
+                "titel": {
+                    "nb_characters": "60",
+                    "content_guidelines": "title",
+                    "reference_content": "title"
+                },
+                "description": {
+                    "nb_characters": "150",
+                    "content_guidelines": "desc",
+                    "reference_content": "desc"
+                }
+            },
+            "bloc_data": {
+                "offer_name": {},
+                "offer_description": {},
+                "offer_type": {}
+            },
+            "bloc_structure_string": {
+                "non_nested_structure": "titel-description",
+                "nested_structure": ""
+            }
+        },
+        "SECONDARY OFFER": {
+            "bloc_guidelines": {
+                "kicker": {
+                    "nb_characters": "50",
+                    "content_guidelines": "kicker",
+                    "reference_content": "kicker"
+                }
+            },
+            "bloc_data": {
+                "offer_usp": {}
+            },
+            "bloc_structure_string": {
+                "non_nested_structure": "kicker",
+                "nested_structure": ""
+            }
+        }
+    },
+    "SOCIAL": {
+        "MAIN POST": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "60",
+                    "content_guidelines": "post title",
+                    "reference_content": "title"
+                },
+                "cta": {
+                    "nb_characters": "50",
+                    "content_guidelines": "cta",
+                    "reference_content": "cta"
+                },
+                "body": {
+                    "nb_characters": "140",
+                    "content_guidelines": "body of the tweet ",
+                    "reference_content": "great tweet"
+                }
+            },
+            "bloc_data": {
+                "offer_name": {},
+                "offer_usp": {}
+            },
+            "bloc_structure_string": {
+                "non_nested_structure": "title-cta-body",
+                "nested_structure": ""
+            }
+        },
+        "TWEET": {
+            "bloc_guidelines": {
+                "tweet_body": {
+                    "nb_characters": "140",
+                    "content_guidelines": "the tweet s body for real",
+                    "reference_content": "real body"
+                }
+            },
+            "bloc_data": {
+                "offer_name": {},
+                "offer_highlight": {}
+            },
+            "bloc_structure_string": {
+                "non_nested_structure": "tweet_body",
+                "nested_structure": ""
+            }
+        }
+    }
+}

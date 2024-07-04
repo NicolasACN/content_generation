@@ -134,7 +134,7 @@ def make_variable_sentence(variable_name, variable_dict):
 # customization_system_prompt, customization_human_prompt = load_prompts(os.path.join(PROMPT_FOLDER_PATH, "Customization"))
 # edition_customization_system_prompt, edition_customization_human_prompt = load_prompts(os.path.join(PROMPT_FOLDER_PATH, "CustomizationEditor"))
 
-def generate_pdp(product_name, product_details, language):
+def generate_pdp(product_name, product_details, language, prompt_folder, model, product_data, data_folder):
     # Output parser creation
     class Copywriting(BaseModel):
         generated_text: str = Field(description="The written product detail page.")
@@ -149,8 +149,14 @@ def generate_pdp(product_name, product_details, language):
     review_output_parser = JsonOutputParser(pydantic_object=Feedback)
     edition_output_parser = JsonOutputParser(pydantic_object=Edition)
 
+    
     # Chains
     ## Copywriting
+    # Load Prompts
+    copywriting_prompt_path = os.path.join(prompt_folder, "Copywriting")
+    assert os.path.exists(copywriting_prompt_path)
+    copywriting_system_prompt, copywriting_human_prompt = load_prompts(copywriting_prompt_path)
+    
     copywriting_prompt = ChatPromptTemplate(
         messages=[
             SystemMessagePromptTemplate.from_template(copywriting_system_prompt),
@@ -163,6 +169,10 @@ def generate_pdp(product_name, product_details, language):
     copywriting_chain = copywriting_prompt | model | copywriting_output_parser
 
     ## Brand Review
+    # Load Prompts
+    brand_review_prompt_path = os.path.join(prompt_folder, "BrandReview")
+    assert os.path.exists(brand_review_prompt_path)
+    brand_review_system_prompt, brand_review_human_prompt = load_prompts(brand_review_prompt_path)
     brand_review_prompt = ChatPromptTemplate(
         messages=[
             SystemMessagePromptTemplate.from_template(brand_review_system_prompt),
@@ -174,10 +184,15 @@ def generate_pdp(product_name, product_details, language):
     brand_review_chain = brand_review_prompt | model | review_output_parser
 
     ## Copywriting Review
+    # Load Prompts
+    copywriting_review_prompt_path = os.path.join(prompt_folder, "CopywritingReview")
+    assert os.path.exists(copywriting_review_prompt_path)
+    copywriting_review_system_prompt, copywriting_review_human_prompt = load_prompts(copywriting_review_prompt_path)
+    
     copywriting_review_prompt = ChatPromptTemplate(
         messages=[
             SystemMessagePromptTemplate.from_template(copywriting_review_system_prompt),
-            HumanMessagePromptTemplate.from_template(copywriting_human_prompt)
+            HumanMessagePromptTemplate.from_template(copywriting_review_human_prompt)
         ],
         input_variables=["role", "copywriting_guidelines", "generated_text"],
         partial_variables={"format_instructions": review_output_parser.get_format_instructions()}
@@ -192,7 +207,12 @@ def generate_pdp(product_name, product_details, language):
             formated_text +=  str(example_dict[product]) + "\n"
             formated_text += "-" * 10 + "\n"
         return formated_text
-            
+    
+    # Load Prompts
+    tov_review_prompt_path = os.path.join(prompt_folder, "TOVReview")
+    assert os.path.exists(tov_review_prompt_path)
+    tov_review_system_prompt, tov_review_human_prompt = load_prompts(tov_review_prompt_path)
+          
     tov_review_prompt = ChatPromptTemplate(
         messages=[
             SystemMessagePromptTemplate.from_template(tov_review_system_prompt),
@@ -204,6 +224,11 @@ def generate_pdp(product_name, product_details, language):
     tov_review_chain = tov_review_prompt | model | review_output_parser
 
     ## Edition
+    # Load Prompts
+    edition_prompt_path = os.path.join(prompt_folder, "Editor")
+    assert os.path.exists(edition_prompt_path)
+    editor_system_prompt, editor_human_prompt = load_prompts(edition_prompt_path)
+          
     edition_prompt = ChatPromptTemplate(
         messages=[
             SystemMessagePromptTemplate.from_template(editor_system_prompt),
@@ -246,7 +271,27 @@ def generate_pdp(product_name, product_details, language):
             return  f"PRODUCT DESCRIPTION:\n{product_detail_list[0]}\n\nOBJECT DESCRIPTION:\n{product_detail_list[1]}\n\nADDITIONAL INFO:\n{product_detail_list[2]}"
         product_details = format_product_details(product_details)
 
-            
+    # Load guidelines 
+    brand_guidelines_path = os.path.join(data_folder, "brand_data", "brand_knowledge.txt")
+    assert os.path.exists(brand_guidelines_path)
+    with open(brand_guidelines_path, "r") as f:
+        brand_knowledge = f.read()
+        
+    copywriting_guidelines_path = os.path.join(data_folder, "brand_data", "copywriting_guidelines.txt")
+    assert os.path.exists(copywriting_guidelines_path)
+    with open(copywriting_guidelines_path, "r") as f:
+        copywriting_guidelines = f.read()
+    
+    persona_path = os.path.join(data_folder, "persona", "persona.txt")
+    assert os.path.exists(persona_path)
+    with open(persona_path, "r") as f:
+        persona = f.read()
+        
+    role_path = os.path.join(prompt_folder, "Role", "role.txt")
+    assert os.path.exists(role_path)
+    with open(role_path, 'r') as f:
+        role = f.read()
+        
     return write_product_description_chain.invoke({
         "role": role, 
         "persona": persona, 
@@ -256,7 +301,6 @@ def generate_pdp(product_name, product_details, language):
         "brand_knowledge": brand_knowledge,
         "copywriting_guidelines": copywriting_guidelines,
         "reference_examples": product_data[language],
-        "platform_specs": hermes_specs,   
         "existing_product_dp": product_data[language][product_name] 
     })
     
@@ -306,142 +350,142 @@ def load_product_details(product_name, language):
 def format_product_details(product_description, object_description, additional_info):
     return f"PRODUCT DESCRIPTION:\n{product_description}\n\nOBJECT DESCRIPTION:\n{object_description}\n\nADDITIONAL INFO:\n{additional_info}\n\n"
 
-def retailer_customize_pdp(product_name, language): 
-    # Output parser creation
-    class Customization(BaseModel):
-        customized_text: str = Field(description="The retailer customized product detail page.")
+# def retailer_customize_pdp(product_name, language): 
+#     # Output parser creation
+#     class Customization(BaseModel):
+#         customized_text: str = Field(description="The retailer customized product detail page.")
 
-    class Feedback(BaseModel):
-        feedback: str = Field(description="The feedback on the copy.")
+#     class Feedback(BaseModel):
+#         feedback: str = Field(description="The feedback on the copy.")
 
-    class Edition(BaseModel):
-        edited_text: str = Field(description="The edited and improved version of the customized product detail page.")
+#     class Edition(BaseModel):
+#         edited_text: str = Field(description="The edited and improved version of the customized product detail page.")
 
-    customization_output_parser = JsonOutputParser(pydantic_object=Customization)
-    review_output_parser = JsonOutputParser(pydantic_object=Feedback)
-    edition_output_parser = JsonOutputParser(pydantic_object=Edition)
+#     customization_output_parser = JsonOutputParser(pydantic_object=Customization)
+#     review_output_parser = JsonOutputParser(pydantic_object=Feedback)
+#     edition_output_parser = JsonOutputParser(pydantic_object=Edition)
 
-    # Chains
-    ## Copywriting
-    customization_prompt = ChatPromptTemplate(
-        messages=[
-            SystemMessagePromptTemplate.from_template(customization_system_prompt),
-            HumanMessagePromptTemplate.from_template(customization_human_prompt)
-        ],
-        input_variables=["role", "persona", "language", "existing_product_dp", "brand_knowledge", "copywriting_guidelines", "reference_examples", "platform_specs"],
-        partial_variables={"format_instructions": customization_output_parser.get_format_instructions()}
-    )
+#     # Chains
+#     ## Copywriting
+#     customization_prompt = ChatPromptTemplate(
+#         messages=[
+#             SystemMessagePromptTemplate.from_template(customization_system_prompt),
+#             HumanMessagePromptTemplate.from_template(customization_human_prompt)
+#         ],
+#         input_variables=["role", "persona", "language", "existing_product_dp", "brand_knowledge", "copywriting_guidelines", "reference_examples", "platform_specs"],
+#         partial_variables={"format_instructions": customization_output_parser.get_format_instructions()}
+#     )
 
-    customization_chain = customization_prompt | model | customization_output_parser
+#     customization_chain = customization_prompt | model | customization_output_parser
 
-    ## Brand Review
-    brand_review_prompt = ChatPromptTemplate(
-        messages=[
-            SystemMessagePromptTemplate.from_template(brand_review_system_prompt),
-            HumanMessagePromptTemplate.from_template(brand_review_human_prompt)
-        ],
-        input_variables=["role", "brand_knowledge", "generated_text"],
-        partial_variables={"format_instructions": review_output_parser.get_format_instructions()}
-    )
-    brand_review_chain = brand_review_prompt | model | review_output_parser
+#     ## Brand Review
+#     brand_review_prompt = ChatPromptTemplate(
+#         messages=[
+#             SystemMessagePromptTemplate.from_template(brand_review_system_prompt),
+#             HumanMessagePromptTemplate.from_template(brand_review_human_prompt)
+#         ],
+#         input_variables=["role", "brand_knowledge", "generated_text"],
+#         partial_variables={"format_instructions": review_output_parser.get_format_instructions()}
+#     )
+#     brand_review_chain = brand_review_prompt | model | review_output_parser
 
-    ## Copywriting Review
-    copywriting_review_prompt = ChatPromptTemplate(
-        messages=[
-            SystemMessagePromptTemplate.from_template(copywriting_review_system_prompt),
-            HumanMessagePromptTemplate.from_template(copywriting_human_prompt)
-        ],
-        input_variables=["role", "copywriting_guidelines", "generated_text"],
-        partial_variables={"format_instructions": review_output_parser.get_format_instructions()}
-    )
-    copywriting_review_chain = copywriting_review_prompt | model | review_output_parser
+#     ## Copywriting Review
+#     copywriting_review_prompt = ChatPromptTemplate(
+#         messages=[
+#             SystemMessagePromptTemplate.from_template(copywriting_review_system_prompt),
+#             HumanMessagePromptTemplate.from_template(copywriting_human_prompt)
+#         ],
+#         input_variables=["role", "copywriting_guidelines", "generated_text"],
+#         partial_variables={"format_instructions": review_output_parser.get_format_instructions()}
+#     )
+#     copywriting_review_chain = copywriting_review_prompt | model | review_output_parser
 
-        ## TOV & Platform Specs Review 
-    def format_examples(example_dict):
-        formated_text = ""
-        for language in ["en", "fr"]:
-            formated_text += f"\nLanguage: {language}\n\n"
-            for product in example_dict["hermes"][language]:
-                formated_text += f"Original text:\n{example_dict['hermes'][language][product]}\n\nAdapted text:\n{example_dict['sephora'][language][product]}\n\n"
-        return formated_text
+#         ## TOV & Platform Specs Review 
+#     def format_examples(example_dict):
+#         formated_text = ""
+#         for language in ["en", "fr"]:
+#             formated_text += f"\nLanguage: {language}\n\n"
+#             for product in example_dict["hermes"][language]:
+#                 formated_text += f"Original text:\n{example_dict['hermes'][language][product]}\n\nAdapted text:\n{example_dict['sephora'][language][product]}\n\n"
+#         return formated_text
             
-    tov_review_prompt = ChatPromptTemplate(
-        messages=[
-            SystemMessagePromptTemplate.from_template(tov_review_system_prompt),
-            HumanMessagePromptTemplate.from_template(tov_review_human_prompt)
-        ],
-        input_variables=["role", "reference_examples", "generated_text"],
-        partial_variables={"format_instructions": review_output_parser.get_format_instructions()}
-    )
-    tov_review_chain = tov_review_prompt | model | review_output_parser
+#     tov_review_prompt = ChatPromptTemplate(
+#         messages=[
+#             SystemMessagePromptTemplate.from_template(tov_review_system_prompt),
+#             HumanMessagePromptTemplate.from_template(tov_review_human_prompt)
+#         ],
+#         input_variables=["role", "reference_examples", "generated_text"],
+#         partial_variables={"format_instructions": review_output_parser.get_format_instructions()}
+#     )
+#     tov_review_chain = tov_review_prompt | model | review_output_parser
 
-    ## Edition
-    edition_customization_prompt = ChatPromptTemplate(
-        messages=[
-            SystemMessagePromptTemplate.from_template(edition_customization_system_prompt),
-            HumanMessagePromptTemplate.from_template(edition_customization_human_prompt)
-        ],
-        input_variables=["role", "persona", "generated_text", "feedback", "brand_knowledge", "copywriting_guidelines", "reference_examples", "existing_product_dp", "platform_specs"], 
-        partial_variables={"format_instructions": edition_output_parser.get_format_instructions()}
-    )
-    edition_customization_chain = edition_customization_prompt | model | edition_output_parser
+#     ## Edition
+#     edition_customization_prompt = ChatPromptTemplate(
+#         messages=[
+#             SystemMessagePromptTemplate.from_template(edition_customization_system_prompt),
+#             HumanMessagePromptTemplate.from_template(edition_customization_human_prompt)
+#         ],
+#         input_variables=["role", "persona", "generated_text", "feedback", "brand_knowledge", "copywriting_guidelines", "reference_examples", "existing_product_dp", "platform_specs"], 
+#         partial_variables={"format_instructions": edition_output_parser.get_format_instructions()}
+#     )
+#     edition_customization_chain = edition_customization_prompt | model | edition_output_parser
 
-    def format_feedback(reviews):
-        brand_review, copywriting_review, tov_review = reviews
-        return f"""Brand Feedback:
-    {brand_review}
+#     def format_feedback(reviews):
+#         brand_review, copywriting_review, tov_review = reviews
+#         return f"""Brand Feedback:
+#     {brand_review}
 
-    Copywriting Feedback:
-    {copywriting_review}
+#     Copywriting Feedback:
+#     {copywriting_review}
 
-    Tone of Voice and Platform specs compliance Feedback:
-    {tov_review}
+#     Tone of Voice and Platform specs compliance Feedback:
+#     {tov_review}
 
-    """
+#     """
 
-    customize_product_description_chain = (
-        RunnablePassthrough.assign(generated_text=customization_chain)
-        | RunnablePassthrough.assign(reference_examples=itemgetter("reference_examples") | RunnableLambda(format_examples))
-        | RunnablePassthrough.assign(
-            brand_review=brand_review_chain | itemgetter("feedback"),
-            copywriting_review=copywriting_review_chain | itemgetter("feedback"),
-            tov_review=tov_review_chain | itemgetter("feedback")
-        ) | RunnablePassthrough.assign(feedback=itemgetter("brand_review", "copywriting_review", "tov_review") | RunnableLambda(format_feedback))
-        | RunnablePassthrough.assign(edited_text=edition_customization_chain | itemgetter('edited_text'))
-        | itemgetter("edited_text")
-    )   
-    if product_name in product_data[language]:
-        product_details = product_data[language][product_name]
-    else:
-        def format_product_details(product_detail_list):
-            return  f"PRODUCT DESCRIPTION:\n{product_detail_list[0]}\n\nOBJECT DESCRIPTION:\n{product_detail_list[1]}\n\nADDITIONAL INFO:\n{product_detail_list[2]}"
-        product_details = format_product_details(product_details)
+#     customize_product_description_chain = (
+#         RunnablePassthrough.assign(generated_text=customization_chain)
+#         | RunnablePassthrough.assign(reference_examples=itemgetter("reference_examples") | RunnableLambda(format_examples))
+#         | RunnablePassthrough.assign(
+#             brand_review=brand_review_chain | itemgetter("feedback"),
+#             copywriting_review=copywriting_review_chain | itemgetter("feedback"),
+#             tov_review=tov_review_chain | itemgetter("feedback")
+#         ) | RunnablePassthrough.assign(feedback=itemgetter("brand_review", "copywriting_review", "tov_review") | RunnableLambda(format_feedback))
+#         | RunnablePassthrough.assign(edited_text=edition_customization_chain | itemgetter('edited_text'))
+#         | itemgetter("edited_text")
+#     )   
+#     if product_name in product_data[language]:
+#         product_details = product_data[language][product_name]
+#     else:
+#         def format_product_details(product_detail_list):
+#             return  f"PRODUCT DESCRIPTION:\n{product_detail_list[0]}\n\nOBJECT DESCRIPTION:\n{product_detail_list[1]}\n\nADDITIONAL INFO:\n{product_detail_list[2]}"
+#         product_details = format_product_details(product_details)
 
-    customize_product_description_chain.invoke({
-        "role": role, 
-        "persona": persona, 
-        "language": language,
-        "product_name": product_name,
-        "brand_knowledge": brand_knowledge,
-        "copywriting_guidelines": copywriting_guidelines,
-        "reference_examples": retailer_product_data,
-        "platform_specs": sephora_specs,   
-        "existing_product_dp": product_data[language]["Terre d Hermès"], 
-        "product_data": retailer_product_data["sephora"][language]["Terre d hermes"] 
-    })
+#     customize_product_description_chain.invoke({
+#         "role": role, 
+#         "persona": persona, 
+#         "language": language,
+#         "product_name": product_name,
+#         "brand_knowledge": brand_knowledge,
+#         "copywriting_guidelines": copywriting_guidelines,
+#         "reference_examples": retailer_product_data,
+#         "platform_specs": sephora_specs,   
+#         "existing_product_dp": product_data[language]["Terre d Hermès"], 
+#         "product_data": retailer_product_data["sephora"][language]["Terre d hermes"] 
+#     })
     
-    return customize_product_description_chain.invoke({
-        "role": role, 
-        "persona": persona, 
-        "language": language,
-        "product_name": product_name,
-        "product_data": product_details,
-        "brand_knowledge": brand_knowledge,
-        "copywriting_guidelines": copywriting_guidelines,
-        "reference_examples": retailer_product_data,
-        "platform_specs": sephora_specs,   
-        "existing_product_dp": product_data[language][product_name] 
-    })
+#     return customize_product_description_chain.invoke({
+#         "role": role, 
+#         "persona": persona, 
+#         "language": language,
+#         "product_name": product_name,
+#         "product_data": product_details,
+#         "brand_knowledge": brand_knowledge,
+#         "copywriting_guidelines": copywriting_guidelines,
+#         "reference_examples": retailer_product_data,
+#         "platform_specs": sephora_specs,   
+#         "existing_product_dp": product_data[language][product_name] 
+#     })
 
 def dict_to_markdown(data):
     markdown_lines = []

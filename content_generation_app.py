@@ -273,6 +273,8 @@ with tab2:
         st.write(st.session_state['brand_knowledge'])
         st.subheader("Current Copywriting Guidelines")
         st.write(st.session_state['copywriting_guidelines'])
+        st.subheader("Current Reference Examples")
+        st.write(st.session_state['reference_examples'])
 
 # New Tab 3: Content Generation
 with tab3:

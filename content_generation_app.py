@@ -26,6 +26,10 @@ if "copywriting_guidelines_files" not in st.session_state:
     st.session_state.copywriting_guidelines_files = []
 if "reference_examples_files" not in st.session_state:
     st.session_state.reference_examples_files = []
+if "brand_docs" not in st.session_state:
+    st.session_state.brand_docs = ""
+if "copywriting_docs" not in st.session_state:
+    st.session_state.copywriting_docs = ""
 if 'structure_dict' not in st.session_state:
     st.session_state['structure_dict'] = {}
 if 'data_dict' not in st.session_state:
@@ -41,8 +45,8 @@ def create_project_structure(project_name, project_brief):
     folders = [
         "data/brand_data",
         "data/persona",
-        "data/platform_specs",
-        "data/product_data",
+        "data/copywriting",
+        #"data/product_data",
         "data/reference_examples",
         "data/project_info",
         "prompts",
@@ -78,6 +82,12 @@ def load_project_details(project_name):
             st.session_state.project_name = f.read()
         with open(os.path.join(project_info_path, "project_brief.txt"), "r") as f:
             st.session_state.project_brief = f.read()
+        
+        # Load brand knowledge, copywriting guidelines, and reference examples
+        load_brand_knowledge(project_name)
+        load_copywriting_guidelines(project_name)
+        load_reference_examples(project_name)
+
         st.success(f"Project '{project_name}' loaded successfully!")
     except Exception as e:
         st.error(f"Error loading project details: {e}")
@@ -88,6 +98,59 @@ def setup_content_template(template_name, content_templates_path):
     os.makedirs(new_template_path, exist_ok=True)
     os.makedirs(os.path.join(new_template_path, "content_data"), exist_ok=True)
     return new_template_path
+
+# Functions to load brand knowledge, copywriting guidelines, and reference examples
+def load_brand_knowledge(project_name):
+    brand_knowledge_path = os.path.join(os.getcwd(), "projects", project_name, "data", "brand_data", "brand_knowledge.txt")
+    if os.path.exists(brand_knowledge_path):
+        with open(brand_knowledge_path, "r") as f:
+            st.session_state.brand_docs = f.read()
+    else:
+        st.session_state.brand_docs = ""
+        st.warning("No brand knowledge found.")
+        
+def load_copywriting_guidelines(project_name):
+    copywriting_guidelines_path = os.path.join(os.getcwd(), "projects", project_name, "data", "copywriting", "copywriting_guidelines.txt")
+    if os.path.exists(copywriting_guidelines_path):
+        with open(copywriting_guidelines_path, "r") as f:
+            st.session_state.copywriting_docs = f.read()
+    else:
+        st.session_state.copywriting_docs = ""
+        st.warning("No copywriting guidelines found.")
+        
+def load_reference_examples(project_name):
+    reference_examples_path = os.path.join(os.getcwd(), "projects", project_name, "data", "reference_examples", "reference_examples.txt")
+    if os.path.exists(reference_examples_path):
+        with open(reference_examples_path, "r") as f:
+            st.session_state.reference_examples_files = f.read()
+    else:
+        st.session_state.reference_examples_files = ""
+        st.warning("No reference examples found.")
+        
+def create_brand_knowledge():
+    concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in st.session_state.brand_knowledge_files])
+    st.session_state.brand_docs = concatenated_docs
+
+def create_copywriting_guidelines():
+    concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in st.session_state.copywriting_guidelines_files])
+    st.session_state.copywriting_docs = concatenated_docs
+
+def import_from_another_project(data_type):
+    project_dir = os.path.join(os.getcwd(), "projects")
+    projects = [d for d in os.listdir(project_dir) if os.path.isdir(os.path.join(project_dir, d))]
+    selected_project = st.selectbox(f"Select a project to import {data_type} from", projects)
+
+    if st.button(f"Import {data_type}"):
+        if selected_project:
+            if data_type == "brand knowledge":
+                load_brand_knowledge(selected_project)
+            elif data_type == "copywriting guidelines":
+                load_copywriting_guidelines(selected_project)
+            elif data_type == "reference examples":
+                load_reference_examples(selected_project)
+            st.success(f"{data_type.capitalize()} imported successfully from project '{selected_project}'!")
+        else:
+            st.error(f"Please select a project to import {data_type} from.")
 
 with tab1:
     st.header("Project Setup")
@@ -129,34 +192,77 @@ with tab2:
     st.header("Data Upload")
     
     # Brand Knowledge Upload
-    st.subheader("Brand Knowledge")
-    brand_knowledge_files = st.file_uploader("Upload Brand Knowledge Files", type=["txt"], accept_multiple_files=True)
-    if st.button("Digest Brand Knowledge"):
-        if brand_knowledge_files:
-            st.session_state.brand_knowledge_files = brand_knowledge_files
-            st.success("Brand knowledge files digested successfully.")
-        else:
-            st.error("Please upload brand knowledge files first.")
-    
+    with st.expander("Brand Knowledge", expanded=False):
+        import_from_another_project("brand knowledge")
+
+        st.subheader("Create New Brand Knowledge")
+        brand_knowledge_files = st.file_uploader("Upload Brand Knowledge Files", type=["txt"], accept_multiple_files=True)
+        if st.button("Digest Brand Knowledge"):
+            if brand_knowledge_files:
+                st.session_state.brand_knowledge_files = brand_knowledge_files
+                create_brand_knowledge()
+                st.success("Brand knowledge files digested successfully.")
+            else:
+                st.error("Please upload brand knowledge files first.")
+        
+        if st.session_state.brand_docs:
+            st.text_area("Brand Knowledge Preview", value=st.session_state.brand_docs, height=200)
+            if st.button("Save Brand Knowledge"):
+                brand_knowledge_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "data", "brand_data", "brand_knowledge.txt")
+                with open(brand_knowledge_path, "w") as f:
+                    f.write(st.session_state.brand_docs)
+                st.success("Brand knowledge saved successfully.")
+
     # Copywriting Guidelines Upload
-    st.subheader("Copywriting Guidelines")
-    copywriting_guidelines_files = st.file_uploader("Upload Copywriting Guidelines Files", type=["txt"], accept_multiple_files=True)
-    if st.button("Digest Copywriting Guidelines"):
-        if copywriting_guidelines_files:
-            st.session_state.copywriting_guidelines_files = copywriting_guidelines_files
-            st.success("Copywriting guidelines files digested successfully.")
-        else:
-            st.error("Please upload copywriting guidelines files first.")
-    
+    with st.expander("Copywriting Guidelines", expanded=False):
+        import_from_another_project("copywriting guidelines")
+
+        st.subheader("Create New Copywriting Guidelines")
+        copywriting_guidelines_files = st.file_uploader("Upload Copywriting Guidelines Files", type=["txt"], accept_multiple_files=True)
+        if st.button("Digest Copywriting Guidelines"):
+            if copywriting_guidelines_files:
+                st.session_state.copywriting_guidelines_files = copywriting_guidelines_files
+                create_copywriting_guidelines()
+                st.success("Copywriting guidelines files digested successfully.")
+            else:
+                st.error("Please upload copywriting guidelines files first.")
+        
+        if st.session_state.copywriting_docs:
+            st.text_area("Copywriting Guidelines Preview", value=st.session_state.copywriting_docs, height=200)
+            if st.button("Save Copywriting Guidelines"):
+                copywriting_guidelines_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "data", "copywriting", "copywriting_guidelines.txt")
+                with open(copywriting_guidelines_path, "w") as f:
+                    f.write(st.session_state.copywriting_docs)
+                st.success("Copywriting guidelines saved successfully.")
+
     # Reference Examples Upload
-    st.subheader("Reference Examples")
-    reference_examples_files = st.file_uploader("Upload Reference Examples Files", type=["txt"], accept_multiple_files=True)
-    if st.button("Digest Reference Examples"):
-        if reference_examples_files:
-            st.session_state.reference_examples_files = reference_examples_files
-            st.success("Reference examples files digested successfully.")
-        else:
-            st.error("Please upload reference examples files first.")
+    with st.expander("Reference Examples", expanded=False):
+        import_from_another_project("reference examples")
+
+        st.subheader("Create New Reference Examples")
+        reference_examples_files = st.file_uploader("Upload Reference Examples Files", type=["txt"], accept_multiple_files=True)
+        if st.button("Digest Reference Examples"):
+            if reference_examples_files:
+                concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in reference_examples_files])
+                st.session_state.reference_examples_files = concatenated_docs
+                st.success("Reference examples files digested successfully.")
+            else:
+                st.error("Please upload reference examples files first.")
+        
+        if st.session_state.reference_examples_files:
+            st.text_area("Reference Examples Preview", value=st.session_state.reference_examples_files, height=200)
+            if st.button("Save Reference Examples"):
+                reference_examples_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "data", "reference_examples", "reference_examples.txt")
+                with open(reference_examples_path, "w") as f:
+                    f.write(st.session_state.reference_examples_files)
+                st.success("Reference examples saved successfully.")
+
+    # Debug Section
+    with st.expander("Debug", expanded=False):
+        st.subheader("Current Brand Knowledge")
+        st.write(st.session_state['brand_docs'])
+        st.subheader("Current Copywriting Guidelines")
+        st.write(st.session_state['copywriting_docs'])
 
 # New Tab 3: Content Generation
 with tab3:
@@ -304,8 +410,6 @@ with tab3:
             with open(os.path.join(template_path, 'content_data', 'data_dict.json'), 'w') as f:
                 json.dump(st.session_state['data_dict'], f, indent=4)
             st.success(f"Structure and data saved successfully at {template_path}/content_data/content_structure.json and {template_path}/content_data/data_dict.json")
-
-    st.markdown("---")  # Separator
 
     # Data Factory Section
     with st.expander("Data Factory", expanded=False):

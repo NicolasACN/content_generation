@@ -500,3 +500,74 @@ def dict_to_markdown(data):
 
     parse_dict(data)
     return "\n\n".join(markdown_lines)
+
+def extract_brand_knowledge(brand_docs: st, model: str = "4-turbo"):
+    model = choose_model(model)
+    
+    system_message = """You are an expert in branding and marketing. 
+    You are working with a team of copywriters and you help them understand the brand, its identity, concepts, culture and heritage. 
+    You have received several documents about the brand. 
+    Your task is to condense those documents into a concise branding brief that will help and guide the copywriters produce on brand content.
+    """
+
+    human_message = """Here are the brand documents separated by ---. Please condense them into a concise brand brief.
+    <brand_documents>
+    {brand_documents}
+    </brand_documents>
+
+    {format_instructions}
+    """
+    
+    class BrandKnowledge(BaseModel):
+        brand_knowledge: str = Field(description="The condensed brand knowledge extracted from the documents to help copywriters.")
+
+    output_parser = JsonOutputParser(pydantic_object=BrandKnowledge)
+    
+    prompt = ChatPromptTemplate(
+        messages=[
+            SystemMessagePromptTemplate.from_template(system_message),
+            HumanMessagePromptTemplate.from_template(human_message),
+        ],
+        input_variables=["brand_documents"],
+        partial_variables={'format_instructions': output_parser.get_format_instructions()}
+    )
+    
+    brand_knowledge_extraction_chain = prompt | model | output_parser
+    
+    return brand_knowledge_extraction_chain.invoke({"brand_documents": brand_docs})
+
+def extract_copywriting_guidelines(copywriting_docs: str, model: str = "4-turbo"):
+    model = choose_model(model)
+    system_message = """You are a journalist expert in writing on brand text. 
+    You are working with a team of copywriters and you role is to guide them to produce perfect copies by providing them an understandable set of copywriting guidelines based on the provided documents.
+    You have received several copywriting guidelines related documents . 
+    Your task is to condense those documents into concise copywriting guidelines that will help and guide the copywriters produce perfect content.
+    """
+
+    human_message = """Here are the copywriting documents separated by ---. Please condense them into concise copywriting guidelines.
+    <copywriting_guidelines_documents>
+    {copywriting_guidelines_documents}
+    </copywriting_guidelines_documents>
+
+    {format_instructions}
+    """
+    
+    class CopywritingGuidelines(BaseModel):
+        copywriting_guidelines: str = Field(description="The condensed copywriting guidelines extracted from the documents to help copywriters.")
+
+    output_parser = JsonOutputParser(pydantic_object=CopywritingGuidelines)
+    
+    prompt = ChatPromptTemplate(
+        messages=[
+            SystemMessagePromptTemplate.from_template(system_message),
+            HumanMessagePromptTemplate.from_template(human_message),
+        ],
+        input_variables=["copywriting_guidelines_documents"],
+        partial_variables={'format_instructions': output_parser.get_format_instructions()}
+    )
+    copywriting_guidelines_extraction_chain = prompt | model | output_parser
+
+    return copywriting_guidelines_extraction_chain.invoke({"copywriting_guidelines_documents": copywriting_docs})
+   
+
+    

@@ -568,6 +568,3 @@ def extract_copywriting_guidelines(copywriting_docs: str, model: str = "4-turbo"
     copywriting_guidelines_extraction_chain = prompt | model | output_parser
 
     return copywriting_guidelines_extraction_chain.invoke({"copywriting_guidelines_documents": copywriting_docs})
-   
-
-    

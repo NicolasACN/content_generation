@@ -4,6 +4,7 @@ import os
 import shutil
 from functions.old.data_processing import make_bloc_structure, fill_hotel_data
 from functions.utils import choose_model, dict_to_markdown
+from functions.utils import extract_brand_knowledge, extract_copywriting_guidelines
 
 # App name and header
 st.title("Content Generation")
@@ -24,12 +25,16 @@ if "brand_knowledge_files" not in st.session_state:
     st.session_state.brand_knowledge_files = []
 if "copywriting_guidelines_files" not in st.session_state:
     st.session_state.copywriting_guidelines_files = []
-if "reference_examples_files" not in st.session_state:
+if "reference_examples" not in st.session_state:
     st.session_state.reference_examples_files = []
 if "brand_docs" not in st.session_state:
     st.session_state.brand_docs = ""
 if "copywriting_docs" not in st.session_state:
     st.session_state.copywriting_docs = ""
+if "brand_knowledge" not in st.session_state:
+    st.session_state['brand_knowledge'] = ""
+if "copywriting_guidelines" not in st.session_state:
+    st.session_state['copywriting_guidelines'] = ""
 if 'structure_dict' not in st.session_state:
     st.session_state['structure_dict'] = {}
 if 'data_dict' not in st.session_state:
@@ -128,12 +133,17 @@ def load_reference_examples(project_name):
         st.warning("No reference examples found.")
         
 def create_brand_knowledge():
+    # Concatenate brand docs
     concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in st.session_state.brand_knowledge_files])
     st.session_state.brand_docs = concatenated_docs
+    # Extract brand knowledge
+    st.session_state['brand_knowledge'] = extract_brand_knowledge(st.session_state.brand_docs)  
 
 def create_copywriting_guidelines():
     concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in st.session_state.copywriting_guidelines_files])
     st.session_state.copywriting_docs = concatenated_docs
+    # Extract brand knowledge
+    st.session_state['copywriting_guidelines'] = extract_copywriting_guidelines(st.session_state.copywriting_docs)  
 
 def import_from_another_project(data_type):
     project_dir = os.path.join(os.getcwd(), "projects")
@@ -244,7 +254,7 @@ with tab2:
         if st.button("Digest Reference Examples"):
             if reference_examples_files:
                 concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in reference_examples_files])
-                st.session_state.reference_examples_files = concatenated_docs
+                st.session_state.reference_examples = concatenated_docs
                 st.success("Reference examples files digested successfully.")
             else:
                 st.error("Please upload reference examples files first.")
@@ -260,9 +270,9 @@ with tab2:
     # Debug Section
     with st.expander("Debug", expanded=False):
         st.subheader("Current Brand Knowledge")
-        st.write(st.session_state['brand_docs'])
+        st.write(st.session_state['brand_knowledge'])
         st.subheader("Current Copywriting Guidelines")
-        st.write(st.session_state['copywriting_docs'])
+        st.write(st.session_state['copywriting_guidelines'])
 
 # New Tab 3: Content Generation
 with tab3:

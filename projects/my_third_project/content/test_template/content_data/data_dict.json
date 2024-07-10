@@ -1,0 +1,14 @@
+{
+    "title_data": {
+        "value": "great introductory and evocative title",
+        "description": "data to help write the title"
+    },
+    "description_data_1": {
+        "value": "less interesting info",
+        "description": "data to help write the description"
+    },
+    "description_data_2": {
+        "value": "now this is interesting data: be mysterious!",
+        "description": "data to help write the description"
+    }
+}

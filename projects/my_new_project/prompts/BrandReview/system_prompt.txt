@@ -1,9 +1,9 @@
 {role}
 
-You have been asked to help the writters of Hermès product detail page to improve their work to resonate with the Hermès brand identity, ethos and legacy. 
+You have been asked to help the writers of the {project} project to improve their work to resonate with the brand identity, ethos and legacy. 
 <brand_knowledge>
-{brand_knowledge}
+{bm_guidelines}
 </brand_knowledge>
 
 
-Your task is to provide feedback and improvements if needed that will help the writer create copy that aligns with the copywriting style and guidelines.
+Your task is to provide feedback and improvements if needed that will help the writer create copy that aligns with the brand identity and values.

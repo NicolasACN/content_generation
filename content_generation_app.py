@@ -5,6 +5,7 @@ import shutil
 from functions.old.data_processing import make_bloc_structure, fill_hotel_data
 from functions.utils import choose_model, dict_to_markdown
 from functions.utils import extract_brand_knowledge, extract_copywriting_guidelines
+from functions.generation import generate_content
 
 # App name and header
 st.title("Content Generation")
@@ -43,6 +44,12 @@ if 'filled_data' not in st.session_state:
     st.session_state['filled_data'] = {}
 if 'generated_content' not in st.session_state:
     st.session_state['generated_content'] = {}
+if 'reference_examples' not in st.session_state:
+    st.session_state['reference_examples'] = ""
+if 'content_template' not in st.session_state:
+    st.session_state['content_template'] = ""
+if 'role' not in st.session_state:
+    st.session_state['role'] = ""
 
 # Function to create project directory structure
 def create_project_structure(project_name, project_brief):
@@ -51,7 +58,7 @@ def create_project_structure(project_name, project_brief):
         "data/brand_data",
         "data/persona",
         "data/copywriting",
-        #"data/product_data",
+        "data/role",
         "data/reference_examples",
         "data/project_info",
         "prompts",
@@ -77,6 +84,15 @@ def create_project_structure(project_name, project_brief):
     except Exception as e:
         st.error(f"Error copying prompts folder: {e}")
 
+def load_role(project_name):
+    role_path = os.path.join(os.getcwd(), "projects", project_name, "data", "role", "role.txt")
+    if os.path.exists(role_path):
+        with open(role_path, "r") as f:
+            st.session_state.role = f.read()
+    else:
+        st.session_state.role = ""
+        st.warning("No role found.")
+
 # Function to load existing project details
 def load_project_details(project_name):
     project_path = os.path.join(os.getcwd(), "projects", project_name)
@@ -88,14 +104,16 @@ def load_project_details(project_name):
         with open(os.path.join(project_info_path, "project_brief.txt"), "r") as f:
             st.session_state.project_brief = f.read()
         
-        # Load brand knowledge, copywriting guidelines, and reference examples
+        # Load brand knowledge, copywriting guidelines, reference examples, and role
         load_brand_knowledge(project_name)
         load_copywriting_guidelines(project_name)
         load_reference_examples(project_name)
+        load_role(project_name)
 
         st.success(f"Project '{project_name}' loaded successfully!")
     except Exception as e:
         st.error(f"Error loading project details: {e}")
+
 
 # Function to setup content template
 def setup_content_template(template_name, content_templates_path):
@@ -109,27 +127,27 @@ def load_brand_knowledge(project_name):
     brand_knowledge_path = os.path.join(os.getcwd(), "projects", project_name, "data", "brand_data", "brand_knowledge.txt")
     if os.path.exists(brand_knowledge_path):
         with open(brand_knowledge_path, "r") as f:
-            st.session_state.brand_docs = f.read()
+            st.session_state.brand_knowledge = f.read()
     else:
-        st.session_state.brand_docs = ""
+        st.session_state.brand_knowledge = ""
         st.warning("No brand knowledge found.")
         
 def load_copywriting_guidelines(project_name):
     copywriting_guidelines_path = os.path.join(os.getcwd(), "projects", project_name, "data", "copywriting", "copywriting_guidelines.txt")
     if os.path.exists(copywriting_guidelines_path):
         with open(copywriting_guidelines_path, "r") as f:
-            st.session_state.copywriting_docs = f.read()
+            st.session_state.copywriting_guidelines = f.read()
     else:
-        st.session_state.copywriting_docs = ""
+        st.session_state.copywriting_guidelines = ""
         st.warning("No copywriting guidelines found.")
         
 def load_reference_examples(project_name):
     reference_examples_path = os.path.join(os.getcwd(), "projects", project_name, "data", "reference_examples", "reference_examples.txt")
     if os.path.exists(reference_examples_path):
         with open(reference_examples_path, "r") as f:
-            st.session_state.reference_examples_files = f.read()
+            st.session_state.reference_examples = f.read()
     else:
-        st.session_state.reference_examples_files = ""
+        st.session_state.reference_examples = ""
         st.warning("No reference examples found.")
         
 def create_brand_knowledge():
@@ -158,9 +176,12 @@ def import_from_another_project(data_type):
                 load_copywriting_guidelines(selected_project)
             elif data_type == "reference examples":
                 load_reference_examples(selected_project)
+            elif data_type == "role":
+                load_role(selected_project)
             st.success(f"{data_type.capitalize()} imported successfully from project '{selected_project}'!")
         else:
             st.error(f"Please select a project to import {data_type} from.")
+
 
 with tab1:
     st.header("Project Setup")
@@ -215,12 +236,12 @@ with tab2:
             else:
                 st.error("Please upload brand knowledge files first.")
         
-        if st.session_state.brand_docs:
-            st.text_area("Brand Knowledge Preview", value=st.session_state.brand_docs, height=200)
+        if st.session_state.brand_knowledge:
+            st.text_area("Brand Knowledge Preview", value=st.session_state.brand_knowledge, height=200)
             if st.button("Save Brand Knowledge"):
                 brand_knowledge_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "data", "brand_data", "brand_knowledge.txt")
                 with open(brand_knowledge_path, "w") as f:
-                    f.write(st.session_state.brand_docs)
+                    f.write(st.session_state.brand_knowledge)
                 st.success("Brand knowledge saved successfully.")
 
     # Copywriting Guidelines Upload
@@ -237,12 +258,12 @@ with tab2:
             else:
                 st.error("Please upload copywriting guidelines files first.")
         
-        if st.session_state.copywriting_docs:
-            st.text_area("Copywriting Guidelines Preview", value=st.session_state.copywriting_docs, height=200)
+        if st.session_state.copywriting_guidelines:
+            st.text_area("Copywriting Guidelines Preview", value=st.session_state.copywriting_guidelines, height=200)
             if st.button("Save Copywriting Guidelines"):
                 copywriting_guidelines_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "data", "copywriting", "copywriting_guidelines.txt")
                 with open(copywriting_guidelines_path, "w") as f:
-                    f.write(st.session_state.copywriting_docs)
+                    f.write(st.session_state.copywriting_guidelines)
                 st.success("Copywriting guidelines saved successfully.")
 
     # Reference Examples Upload
@@ -253,11 +274,18 @@ with tab2:
         reference_examples_files = st.file_uploader("Upload Reference Examples Files", type=["txt"], accept_multiple_files=True)
         if st.button("Digest Reference Examples"):
             if reference_examples_files:
-                concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in reference_examples_files])
-                st.session_state.reference_examples = concatenated_docs
+                concatenated_docs = "\n\n---\n\nEXAMPLE:\n".join([file.read().decode("utf-8") for file in reference_examples_files])
+                st.session_state.reference_examples = "EXAMPLE:\n" + concatenated_docs
                 st.success("Reference examples files digested successfully.")
             else:
                 st.error("Please upload reference examples files first.")
+        if st.session_state.reference_examples:
+            st.text_area("Reference Examples Preview", value=st.session_state.reference_examples, height=200)
+            if st.button("Save Reference Examples"):
+                reference_examples_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "data", "reference_examples", "reference_examples.txt")
+                with open(reference_examples_path, "w") as f:
+                    f.write(st.session_state.reference_examples)
+                st.success("Reference examples saved successfully.")
         
         if st.session_state.reference_examples_files:
             st.text_area("Reference Examples Preview", value=st.session_state.reference_examples_files, height=200)
@@ -266,6 +294,23 @@ with tab2:
                 with open(reference_examples_path, "w") as f:
                     f.write(st.session_state.reference_examples_files)
                 st.success("Reference examples saved successfully.")
+    
+    # Copywriting Role Upload
+    with st.expander("Copywriting Role", expanded=False):
+        import_from_another_project("role")
+
+        st.subheader("Define Copywriting Role")
+        st.session_state.role = st.text_area("Writer's Role", value=st.session_state.role, height=100)
+        if st.button("Save Role"):
+            if st.session_state.role:
+                role_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "data", "role", "role.txt")
+                os.makedirs(os.path.dirname(role_path), exist_ok=True)
+                with open(role_path, "w") as f:
+                    f.write(st.session_state.role)
+                st.success("Copywriting role saved successfully.")
+            else:
+                st.error("Please enter the writer's role.")
+
 
     # Debug Section
     with st.expander("Debug", expanded=False):
@@ -275,6 +320,9 @@ with tab2:
         st.write(st.session_state['copywriting_guidelines'])
         st.subheader("Current Reference Examples")
         st.write(st.session_state['reference_examples'])
+        st.subheader("Current Role")
+        st.write(st.session_state['role'])
+
 
 # New Tab 3: Content Generation
 with tab3:
@@ -309,10 +357,14 @@ with tab3:
                         json.dump({}, f)
                     with open(os.path.join(new_template_path, 'content_data', 'data_dict.json'), 'w') as f:
                         json.dump({}, f)
+                    with open(os.path.join(new_template_path, 'content_data', 'filled_data.json'), 'w') as f:
+                        json.dump({}, f)
                     
                     st.success(f"Template '{new_template_name}' created successfully!")
+                    st.session_state['content_template'] = new_template_name
                     st.session_state['structure_dict'] = {}  # Clear the structure dictionary for new template
                     st.session_state['data_dict'] = {}  # Clear the data dictionary for new template
+                    st.session_state['filled_data'] = {} # Clear the filled data for new template
             else:
                 load_template_button = st.button("Load Template")
                 if load_template_button:
@@ -325,6 +377,10 @@ with tab3:
                         if os.path.exists(os.path.join(template_path, 'content_data', 'data_dict.json')):
                             with open(os.path.join(template_path, 'content_data', 'data_dict.json'), 'r') as f:
                                 st.session_state['data_dict'] = json.load(f)
+                        if os.path.exists(os.path.join(template_path, 'content_data', 'filled_data.json')):
+                            with open(os.path.join(template_path, 'content_data', 'filled_data.json'), 'r') as f:
+                                st.session_state['filled_data'] = json.load(f)
+                        st.session_state['content_template'] = selected_template
                         st.success(f"Template '{selected_template}' loaded successfully!")
                     except Exception as e:
                         st.error(f"Error loading template '{selected_template}': {e}")
@@ -466,25 +522,43 @@ with tab3:
             st.warning("No filled data available. Please go to the Structure section and save data structures first.")
         else:
             if st.button("Generate Content"):
-                # Assuming generate_content takes filled data and returns content
+                save_path = os.path.join(os.getcwd(), "projects", st.session_state["project_name"], "content", st.session_state['content_template'], "output")
+                os.makedirs(save_path, exist_ok=True)
+                prompt_folder = os.path.join(os.getcwd(), "projects", st.session_state["project_name"], "prompts")
+                
+                # TODO : REMOVE DEBUG
+                print("PROMPT FOLDER")
+                print(prompt_folder)
+                print("-------------------")
+                
                 model = choose_model("4-turbo")
-                generated_content = generate_content(st.session_state['filled_data'], model=model)
+
+                generated_content = generate_content(content_data=st.session_state['filled_data'], reference_examples=st.session_state.reference_examples, role=st.session_state.role, project=st.session_state.project_name, prompt_folder=prompt_folder, brand_knowledge=st.session_state['brand_knowledge'], cw_guidelines=st.session_state['copywriting_guidelines'], model=model)
                 st.session_state['generated_content'] = generated_content
-                # format and print content
-                formated_content = dict_to_markdown(generated_content)
+                
+                # Preview generated content
+                formated_content = dict_to_markdown(st.session_state['generated_content'])
                 st.markdown(formated_content)
                 
-            if 'generated_content' in st.session_state and st.session_state['generated_content']:
-                # Folder selection and saving content
-                st.subheader("Save Generated Content")
-                save_path = st.text_input("Enter the folder path to save the content", key="save_folder")
-                if st.button("Save Content"):
-                    if save_path:
-                        if not os.path.exists(save_path):
-                            os.makedirs(save_path, exist_ok=True)
-                        with open(os.path.join(save_path, 'generated_content.json'), 'w') as f:
-                            json.dump(st.session_state['generated_content'], f, indent=4)
-                        st.success(f"Content saved successfully in {save_path}")
+                # Save Generated Content
+                with open(os.path.join(save_path, 'generated_content.json'), 'w') as f:
+                    json.dump(st.session_state['generated_content'], f, indent=4)
+                    st.success(f"Content saved successfully in {save_path}")
+                    
+            # if 'generated_content' in st.session_state and st.session_state['generated_content']:
+            #     # Folder selection and saving content
+            #     st.subheader("Save Generated Content")
+                
+            #     save_path = os.path.join(os.getcwd(), "projects", st.session_state["project_name"], "content", "output")
+            #     os.makedirs(save_path, exist_ok=True)
+                
+            #     if st.button("Save Content"):
+            #         if save_path:
+            #             if not os.path.exists(save_path):
+            #                 os.makedirs(save_path, exist_ok=True)
+            #             with open(os.path.join(save_path, 'generated_content.json'), 'w') as f:
+            #                 json.dump(st.session_state['generated_content'], f, indent=4)
+            #             st.success(f"Content saved successfully in {save_path}")
 
     # Debug Section
     with st.expander("Debug", expanded=False):
@@ -492,3 +566,5 @@ with tab3:
         st.write(st.session_state['structure_dict'])
         st.subheader("Current Data Dictionary")
         st.write(st.session_state['data_dict'])
+        st.subheader("Filled Data")
+        st.write(st.session_state['filled_data'])

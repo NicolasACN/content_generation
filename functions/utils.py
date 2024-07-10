@@ -532,7 +532,7 @@ def extract_brand_knowledge(brand_docs: st, model: str = "4-turbo"):
         partial_variables={'format_instructions': output_parser.get_format_instructions()}
     )
     
-    brand_knowledge_extraction_chain = prompt | model | output_parser
+    brand_knowledge_extraction_chain = prompt | model | output_parser | itemgetter("brand_knowledge")
     
     return brand_knowledge_extraction_chain.invoke({"brand_documents": brand_docs})
 
@@ -565,6 +565,39 @@ def extract_copywriting_guidelines(copywriting_docs: str, model: str = "4-turbo"
         input_variables=["copywriting_guidelines_documents"],
         partial_variables={'format_instructions': output_parser.get_format_instructions()}
     )
-    copywriting_guidelines_extraction_chain = prompt | model | output_parser
+    copywriting_guidelines_extraction_chain = prompt | model | output_parser | itemgetter("copywriting_guidelines")
 
     return copywriting_guidelines_extraction_chain.invoke({"copywriting_guidelines_documents": copywriting_docs})
+
+def character_limit_check_section(section, character_limit):
+    for element in section:
+        try:
+            # Exclude image_labell
+            if "image_label" in element:
+                continue
+
+            # Nested
+            elif isinstance(section[element], list):
+                for nested_item in section[element]:
+                    for nested_element in nested_item:
+                        if len(nested_item[nested_element]) > get_character_limit(character_limit[nested_element]) * 1.5:
+                            return False
+            # Non Nested
+            elif len(section[element]) > get_character_limit(character_limit[element]) * 1.5:
+                return False
+        except Exception as e:
+            print(f"Found error {e} at section : \n{section} and character limit: \n{character_limit}")
+    return True
+
+def get_character_limit(limit):
+    if "words" in limit:
+        return 60
+    return int(limit.split(' ')[0])
+
+def load_prompt(file_path):
+    return read_file(file_path)
+
+def load_message_prompts(file_path):
+    system_prompt = load_prompt(os.path.join(file_path, 'system_prompt.txt'))
+    human_prompt = load_prompt(os.path.join(file_path, 'human_prompt.txt'))
+    return system_prompt, human_prompt

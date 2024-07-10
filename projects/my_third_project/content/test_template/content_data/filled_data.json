@@ -1,0 +1,66 @@
+{
+    "MAIN PAGE": {
+        "FIRST SECTION": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "70 chars",
+                    "content_guidelines": "some title",
+                    "reference_content": "Im a title"
+                },
+                "description": {
+                    "nb_characters": "300 chars",
+                    "content_guidelines": "Some description",
+                    "reference_content": "Im a description, tho I'm not a great one"
+                }
+            },
+            "bloc_data": {
+                "title_data": {
+                    "value": "great introductory and evocative title",
+                    "description": "data to help write the title"
+                },
+                "description_data_1": {
+                    "value": "less interesting info",
+                    "description": "data to help write the description"
+                },
+                "description_data_2": {
+                    "value": "now this is interesting data: be mysterious!",
+                    "description": "data to help write the description"
+                }
+            },
+            "bloc_structure_string": {
+                "non_nested_structure": "title-description",
+                "nested_structure": ""
+            }
+        },
+        "SECOND SECTION": {
+            "bloc_guidelines": {
+                "cta": {
+                    "nb_characters": "30 chars",
+                    "content_guidelines": "CTA",
+                    "reference_content": "CLICK NOW"
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "cta",
+                "nested_structure": ""
+            }
+        }
+    },
+    "WELCOME PAGE": {
+        "WELCOME MESSAGE": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "70 chars",
+                    "content_guidelines": "A warm welcoming title",
+                    "reference_content": "GREETINGS TRAVELERS!"
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "title",
+                "nested_structure": ""
+            }
+        }
+    }
+}

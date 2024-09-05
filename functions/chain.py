@@ -241,7 +241,7 @@ def make_bloc_model_from_structure(structure):
     )
     return bloc_model
 
-def make_bloc_generation_chain(bloc_data_prompt_formating_chain, bloc_guidelines_prompt_formating_chain, writing_chain, BM_review_feedback_chain, CW_review_feedback_chain, TOV_review_feedback_chain):
+def make_bloc_generation_chain(bloc_data_prompt_formating_chain, bloc_guidelines_prompt_formating_chain, writing_chain, CW_review_feedback_chain, TOV_review_feedback_chain):
     bloc_generation_chain = (
         RunnablePassthrough.assign(
             formated_bloc_data=bloc_data_prompt_formating_chain,
@@ -252,17 +252,17 @@ def make_bloc_generation_chain(bloc_data_prompt_formating_chain, bloc_guidelines
         #| RunnablePassthrough.assign(formated_bloc_context=bloc_context_prompt_formating_chain) # Add context
         | RunnablePassthrough.assign(generated_text=writing_chain)
         | RunnablePassthrough.assign(
-            bm_review=BM_review_feedback_chain, 
+            #bm_review=BM_review_feedback_chain, 
             cw_review=CW_review_feedback_chain,
             tov_review=TOV_review_feedback_chain)
     )
     return bloc_generation_chain
 
-def make_bloc_regeneration_chain(rewriting_chain, BM_review_feedback_chain, CW_review_feedback_chain, TOV_review_feedback_chain):
+def make_bloc_regeneration_chain(rewriting_chain, CW_review_feedback_chain, TOV_review_feedback_chain):
     bloc_regeneration_chain = (
         RunnablePassthrough.assign(generated_text=rewriting_chain)
         | RunnablePassthrough.assign(
-            bm_review=BM_review_feedback_chain,
+            #bm_review=BM_review_feedback_chain,
             cw_review=CW_review_feedback_chain,
             tov_review=TOV_review_feedback_chain)
     )

@@ -33,14 +33,14 @@ def generate_section(content_data, page, section, content_brief="", reference_ex
     assert os.path.exists(prompt_folder)
     writing_prompt_path = os.path.join(prompt_folder, 'Copywriting')
     rewriting_prompt_path = os.path.join(prompt_folder, 'Rewriting')
-    bm_review_prompt_path = os.path.join(prompt_folder, 'BrandReview')
+    #bm_review_prompt_path = os.path.join(prompt_folder, 'BrandReview')
     cw_review_prompt_path = os.path.join(prompt_folder, 'CopywritingReview')
     tov_review_prompt_path = os.path.join(prompt_folder, "TOVReview")
     # seo_keywords_prompt_path = os.path.join(prompt_folder, 'SEOKeywords')
     # seo_writer_prompt_path = os.path.join(prompt_folder, 'SEOWriter')
     
     ## Prompts
-    brand_review_and_feedback_system_message_prompt, brand_review_and_feedback_human_message_prompt  = load_message_prompts(bm_review_prompt_path)
+    #brand_review_and_feedback_system_message_prompt, brand_review_and_feedback_human_message_prompt  = load_message_prompts(bm_review_prompt_path)
     cw_review_and_feedback_system_message_prompt, cw_review_and_feedback_human_message_prompt = load_message_prompts(cw_review_prompt_path)
     tov_review_and_feedback_system_message_prompt, tov_review_and_feedback_human_message_prompt = load_message_prompts(tov_review_prompt_path)
     writing_system_message_prompt, writing_human_message_prompt = load_message_prompts(writing_prompt_path)
@@ -81,7 +81,7 @@ def generate_section(content_data, page, section, content_brief="", reference_ex
     #first_draft_writing_chain = make_writing_chain(model, writing_prompt, section_structure_model)
     #rewriting_chain = make_rewriting_chain(model, rewriting_prompt, section_structure_model)        
     
-    BM_review_feedback_chain = make_BM_review_feedback_chain(model, brand_review_and_feedback_system_message_prompt, brand_review_and_feedback_human_message_prompt)
+    #BM_review_feedback_chain = make_BM_review_feedback_chain(model, brand_review_and_feedback_system_message_prompt, brand_review_and_feedback_human_message_prompt)
     CW_review_feedback_chain = make_CW_review_feedback_chain(model, cw_review_and_feedback_system_message_prompt, cw_review_and_feedback_human_message_prompt)
     TOV_review_feedback_chain = make_TOV_review_feedback_chain(model, tov_review_and_feedback_system_message_prompt, tov_review_and_feedback_human_message_prompt)
     first_draft_writing_chain = make_writing_chain(model, section_structure_model, writing_system_message_prompt, writing_human_message_prompt)
@@ -95,7 +95,7 @@ def generate_section(content_data, page, section, content_brief="", reference_ex
         bloc_data_prompt_formating_chain,
         bloc_guidelines_prompt_formating_chain,
         first_draft_writing_chain,
-        BM_review_feedback_chain,
+        #BM_review_feedback_chain,
         CW_review_feedback_chain,
         TOV_review_feedback_chain,
         )
@@ -103,7 +103,7 @@ def generate_section(content_data, page, section, content_brief="", reference_ex
     ### rewriting chain
     improve_draft_chain = make_bloc_regeneration_chain(
         rewriting_chain,
-        BM_review_feedback_chain,
+        #BM_review_feedback_chain,
         CW_review_feedback_chain,
         TOV_review_feedback_chain,
         )
@@ -148,7 +148,7 @@ def generate_section(content_data, page, section, content_brief="", reference_ex
             "formated_bloc_data": output_dict['formated_bloc_data'],
             "formated_bloc_guidelines": output_dict['formated_bloc_guidelines'],
             #"formated_bloc_context": output_dict['formated_bloc_context'], ## new
-            "bm_review": output_dict['bm_review'],
+            #"bm_review": output_dict['bm_review'],
             "cw_review": output_dict['cw_review'],
             "tov_review": output_dict['tov_review'],
             "generated_text": output_dict['generated_text'],

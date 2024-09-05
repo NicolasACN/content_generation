@@ -1,0 +1,21 @@
+{
+    "LANDING PAGE": {
+        "LANDING PAGE 1": {
+            "heading_offers_title": "Unlock Exclusive Rewards Across MEAPAC with Pullman",
+            "item": [
+                {
+                    "list_item_title1": "Earn 4X Reward Points",
+                    "list_item_title2": "Valid at Select Pullman Destinations",
+                    "list_item_title3": "Book by 31st January 2025",
+                    "list_item_title4": "Stay from 2nd Sep 2024 to 31st Jan 2025"
+                }
+            ],
+            "loyalty_login_bloc_description": "This offer is exclusive to members of ALL only, log in to take advantage of this offer.",
+            "loyalty_subscription_bloc": "This offer is exclusive to members of ALL only, log in to take advantage of this offer.",
+            "properties_tab_title": "Explore Pullman's Premier Destinations",
+            "properties_tab_text": "Immerse yourself in the elegance and sophistication of Pullman Hotels across the vibrant regions of MEAPAC. From the serene beaches of the Maldives to the bustling streets of Tokyo, each location offers a unique gateway to local culture and exquisite comfort.\n\nEarn 4X Reward Points as an ALL member when you book at our participating properties before the 31st of January, 2025.\n\nHow to enjoy this splendid offer:\n\u2022 Ensure you're a logged-in member of ALL.\n\u2022 Select from our top-tier hotels in Melbourne, Tokyo, Dubai, and more.\n\u2022 Experience unparalleled hospitality and accumulate rewards.",
+            "properties_tab_cta": "View Our Elite Hotels",
+            "cta_heading": "Book Now"
+        }
+    }
+}

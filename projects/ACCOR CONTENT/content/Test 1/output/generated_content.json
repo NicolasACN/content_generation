@@ -1,0 +1,27 @@
+{
+    "E-MERCH": {
+        "LANDING PAGE": {
+            "title": "Spring Sale 2024: Unveil 20% Off Your Next Journey",
+            "description": "Are you poised to discover the enchanting springtime across Europe, North Africa, and Israel? Our Spring Sale 2024 invites you to indulge in a symphony of cultures and landscapes with an exclusive 20% discount on flexible rates. From the cobblestone alleys of European cities to the sun-drenched bazaars of North Africa, and the historic vistas of Israel, your journey promises to be both enriching and memorable.\n\nSecure your booking from 12th February to 28th February 2024, and travel from 1st April to 27th May 2024. Experience the pinnacle of hospitality at our distinguished brands such as Mercure, Novotel, and Pullman. As an Accor member, enjoy an additional discount of up to 10% in Europe and North Africa. If you're not yet a member, join today to access these exclusive benefits early.\n\nEmbrace the opportunity to create lasting memories and connect with diverse cultures. Our commitment to sustainability ensures that your travels not only inspire but also contribute positively to the destinations you visit. Book now and be part of a journey that values both luxury and responsibility.",
+            "list_usp": "- Book by 28th Feb - Travel from 1st Apr to 27th May - Exclusive early access for members - Participating brands across ENA"
+        },
+        "HOMEPAGE BANNER 1": {
+            "title": "Embrace Spring with Sustainable Luxury in Europe and North Africa",
+            "offer_copy": "Rejuvenate this spring while supporting eco-friendly initiatives with up to 20% off at our select hotels.",
+            "alt_text": "Spring 2024 eco-conscious travel offer with up to 20% savings in Europe and North Africa",
+            "cta": "Discover More & Book Now"
+        },
+        "HOMEPAGE BANNER 2": {
+            "title": "Embrace Spring with Sustainable Elegance",
+            "offer_copy": "Discover vibrant cultures and innovative stays with 20% off this spring",
+            "alt_text": "Spring 2024 sustainable travel offer with up to 20% discount in Europe and North Africa",
+            "cta": "Discover Sustainably, Book Now"
+        },
+        "HOMEPAGE BANNER 3": {
+            "title": "Embrace Spring Elegance: Discover More for Less",
+            "offer_copy": "Immerse yourself in the blossoming beauty of Europe and North Africa. Enjoy 20% off your luxurious stay, supporting sustainable and innovative hospitality.",
+            "alt_text": "Spring 2024 luxury travel offer across Europe and North Africa with a focus on sustainability.",
+            "cta": "Experience the Future of Hospitality\u2014Book Now"
+        }
+    }
+}

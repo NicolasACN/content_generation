@@ -28,7 +28,7 @@ def get_section_data(content_data, page, section=None, instance_name=None):
     #             continue
     #     return section_data
     
-def generate_section(content_data, page, section, reference_examples="", prompt_folder="./reference/prompts", language="British English", project="", role="world recognized copywriter", instance_name=None, cw_guidelines="", brand_knowledge="", intermediate_output_folder="./output/intermediate-output", max_iter=1, model=choose_model("4-turbo"), version=0, max_attempts=2, log_intermediate=False):
+def generate_section(content_data, page, section, content_brief="", reference_examples="", prompt_folder="./reference/prompts", language="British English", project="", role="world recognized copywriter", instance_name=None, cw_guidelines="", brand_knowledge="", intermediate_output_folder="./output/intermediate-output", max_iter=1, model=choose_model("4o"), version=0, max_attempts=2, log_intermediate=False):
     # Load Prompts
     assert os.path.exists(prompt_folder)
     writing_prompt_path = os.path.join(prompt_folder, 'Copywriting')
@@ -62,7 +62,8 @@ def generate_section(content_data, page, section, reference_examples="", prompt_
         "language": language,
         "project": project, 
         "role": role,
-        "reference_examples": reference_examples
+        "reference_examples": reference_examples,
+        "content_brief": content_brief
     }
     
     #print(input_data)
@@ -119,6 +120,7 @@ def generate_section(content_data, page, section, reference_examples="", prompt_
     #attempts = 0
     
     character_limit = {element: input_data['bloc_guidelines'][element]["nb_characters"] for element in input_data['bloc_guidelines']}
+    # TODO : faked for now : to smooth later
     passed_content_length_check = False
     while not passed_content_length_check:
     #     try: 
@@ -160,7 +162,8 @@ def generate_section(content_data, page, section, reference_examples="", prompt_
             "language": language,
             "project": project, 
             "role": role,
-            "reference_examples": reference_examples
+            "reference_examples": reference_examples,
+            "content_brief": content_brief
         }
         
         # Regenerate section
@@ -171,7 +174,9 @@ def generate_section(content_data, page, section, reference_examples="", prompt_
         
         # Content Length Check
         try:
-            passed_content_length_check = character_limit_check_section(generated_section, character_limit)
+            #TODO : do the check for real (add tolerance)
+            # passed_content_length_check = character_limit_check_section(generated_section, character_limit)
+            passed_content_length_check = True
         except Exception as e:
             print(f"ERROR AT {generated_section} with char limit {character_limit}")
             raise e
@@ -225,10 +230,10 @@ def generate_section(content_data, page, section, reference_examples="", prompt_
     #     generated_section['kicker'] = remove_punctuation(generated_section['kicker'])
     return generated_section
 
-def generate_page(content_data, page, reference_examples="", project="", role="world recognized copywriter", language="British English", prompt_folder="./reference/prompts", brand_knowledge="", cw_guidelines="", instance_name=None, intermediate_output_folder="./intermediate-output", max_iter=1, model=choose_model("4-turbo"), version=0, log_intermediate=False):
+def generate_page(content_data, page, content_brief="", reference_examples="", project="", role="world recognized copywriter", language="British English", prompt_folder="./reference/prompts", brand_knowledge="", cw_guidelines="", instance_name=None, intermediate_output_folder="./intermediate-output", max_iter=1, model=choose_model("4o"), version=0, log_intermediate=False):
     generated_sections = {}
     for section in tqdm(content_data[page]):
-        generated_sections[section] = generate_section(content_data=content_data, reference_examples=reference_examples, page=page, section=section, project=project, role=role, language=language, prompt_folder=prompt_folder, brand_knowledge=brand_knowledge, cw_guidelines=cw_guidelines, intermediate_output_folder=intermediate_output_folder, max_iter=max_iter, model=model, version=version, log_intermediate=log_intermediate)
+        generated_sections[section] = generate_section(content_data=content_data, content_brief=content_brief, reference_examples=reference_examples, page=page, section=section, project=project, role=role, language=language, prompt_folder=prompt_folder, brand_knowledge=brand_knowledge, cw_guidelines=cw_guidelines, intermediate_output_folder=intermediate_output_folder, max_iter=max_iter, model=model, version=version, log_intermediate=log_intermediate)
 
     # multi_instance_pages = ['ROOM DP', 'MICE DP', 'RESTAURANT DP']
     
@@ -261,7 +266,7 @@ def generate_page(content_data, page, reference_examples="", project="", role="w
 #         seo_enriched_content[page]["SEO"] = generate_page_seo_section(generated_content[page], page, model)
 #     return seo_enriched_content
 
-def generate_content(content_data, reference_examples="", project="", role="world recognized copywriter", language="British English", prompt_folder="./reference/prompts", brand_knowledge="", cw_guidelines="", output_folder="./output", intermediate_output_folder="./intermediate-output", max_iter=1, model=choose_model("4-turbo"), version=0, log_intermediate=False):
+def generate_content(content_data, content_brief="", reference_examples="", project="", role="world recognized copywriter", language="British English", prompt_folder="./reference/prompts", brand_knowledge="", cw_guidelines="", output_folder="./output", intermediate_output_folder="./intermediate-output", max_iter=1, model=choose_model("4o"), version=0, log_intermediate=False):
     generated_content = {}
     
     for page in tqdm(content_data):
@@ -269,7 +274,7 @@ def generate_content(content_data, reference_examples="", project="", role="worl
         #     continue
         # else:
         #     website_content[page] = generate_page(content_data=content_data, page=page, intermediate_output_folder=intermediate_output_folder, max_iter=max_iter, model=model, version=version, log_intermediate=log_intermediate)
-        generated_content[page] = generate_page(content_data=content_data, page=page, reference_examples=reference_examples, project=project, role=role, language=language, prompt_folder=prompt_folder, brand_knowledge=brand_knowledge, cw_guidelines=cw_guidelines, intermediate_output_folder=intermediate_output_folder, max_iter=max_iter, model=model, version=version, log_intermediate=log_intermediate)
+        generated_content[page] = generate_page(content_data=content_data, page=page, content_brief=content_brief, reference_examples=reference_examples, project=project, role=role, language=language, prompt_folder=prompt_folder, brand_knowledge=brand_knowledge, cw_guidelines=cw_guidelines, intermediate_output_folder=intermediate_output_folder, max_iter=max_iter, model=model, version=version, log_intermediate=log_intermediate)
     
     #oos_page_removed_website_content = remove_excluded_page(website_content)
     

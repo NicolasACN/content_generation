@@ -1,0 +1,68 @@
+{
+    "LANDING PAGE": {
+        "LANDING PAGE 1": {
+            "bloc_guidelines": {
+                "heading_offers_title": {
+                    "nb_characters": "60",
+                    "content_guidelines": "Purpose: Highlight the key benefit of the offer.\nTone: Engaging, concise, and benefit-driven.\nStructure: Begin with an action verb that emphasizes the reward (e.g., \u201cEarn,\u201d \u201cGet\u201d). Include the unique selling point, such as the reward type (e.g., \u201c4X Reward points\u201d) and a geographic or thematic element if relevant.",
+                    "reference_content": "Earn 4X Reward points for your memorable stay in Japan"
+                },
+                "list_item_title1": {
+                    "nb_characters": "30",
+                    "content_guidelines": "Purpose: Summarize the main reward or benefit.\nTone: Direct and informative.\nStructure: Start with \u201cEarn\u201d followed by the reward (e.g., \u201c5X Reward Points\u201d).",
+                    "reference_content": "Earn 4X Reward Points"
+                },
+                "list_item_title2": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Purpose: Specify the conditions or participating elements of the offer.\nTone: Clear and factual.\nStructure: Mention the eligibility criteria, such as participating hotels or destinations.",
+                    "reference_content": "Available for participating Pullman hotels"
+                },
+                "list_item_title3": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Purpose: Indicate the booking deadline.\nTone: Urgent yet straightforward.\nStructure: Include the booking deadline date.\n",
+                    "reference_content": "Book by 30 September 2024"
+                },
+                "list_item_title4": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Purpose: Highlight the eligible stay period.\nTone: Informative.\nStructure: State the stay dates clearly.",
+                    "reference_content": "For stays until 31 December 2024."
+                },
+                "loyalty_login_bloc_description": {
+                    "nb_characters": "90",
+                    "content_guidelines": "Purpose: Remind users about the exclusivity of the offer for ALL members.\nTone: Inviting and exclusive.\nStructure: Include a call to action encouraging login.\nShould always be : \u201cThis offer is exclusive to members of ALL only, log in to take advantage of this offer.\u201d",
+                    "reference_content": "\u201cThis offer is exclusive to members of ALL only, log in to take advantage of this offer.\u201d"
+                },
+                "loyalty_subscription_bloc": {
+                    "nb_characters": "90",
+                    "content_guidelines": "Purpose: Reinforce the exclusive nature of the offer for ALL members and prompt registration or login.\nTone: Encouraging and exclusive.\nStructure: Similar to the login bloc description, with a focus on membership benefits.\nShould always be: \u201cThis offer is exclusive to members of ALL only, log in to take advantage of this offer.\u201d",
+                    "reference_content": "\u201cThis offer is exclusive to members of ALL only, log in to take advantage of this offer.\u201d"
+                },
+                "properties_tab_title": {
+                    "nb_characters": "60",
+                    "content_guidelines": "Purpose: Introduce more details about the destination or participating hotels.\nTone: Descriptive and inviting.\nStructure: Use an engaging phrase that introduces the location or hotels.",
+                    "reference_content": "Explore the best of Pullman Hotels"
+                },
+                "properties_tab_text": {
+                    "nb_characters": "800",
+                    "content_guidelines": "Purpose: Provide more context about the destination and offer.\nTone: Descriptive, informative, and promotional.\nStructure: Start with an enticing introduction to the location, followed by offer details and clear steps to activate the offer.",
+                    "reference_content": "Discover a world of refined luxury with Pullman Hotels, where every stay promises exceptional experiences and unforgettable moments.\n\nEarn 5X Reward points as an ALL member when you book at our participating Pullman properties before 30 September 2024.\n\nHow to make the most of this offer:\n\u2022 Register as a member of ALL to activate the offer. Not a member yet? Sign up now!\n\u2022 Book your stay at participating Pullman hotels.\n\u2022 Experience unrivaled hospitality and earn 5X Reward Points!\n"
+                },
+                "properties_tab_cta": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Purpose: Direct users to view participating properties or book.\nTone: Action-oriented.\nStructure: A short, compelling CTA that directs to hotel listings.",
+                    "reference_content": "Discover our participating hotels."
+                },
+                "cta_heading": {
+                    "nb_characters": "20",
+                    "content_guidelines": "Purpose: Highlight the action or experience awaiting the user.\nTone: Engaging and straightforward.\nStructure: Briefly describe what the user will explore or book",
+                    "reference_content": "View Hotels"
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "heading_offers_title-item-loyalty_login_bloc_description-loyalty_subscription_bloc-properties_tab_title-properties_tab_text-properties_tab_cta-cta_heading",
+                "nested_structure": "list_item_title1-list_item_title2-list_item_title3-list_item_title4"
+            }
+        }
+    }
+}

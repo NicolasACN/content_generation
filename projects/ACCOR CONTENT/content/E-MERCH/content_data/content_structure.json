@@ -1,0 +1,23 @@
+{
+    "E-MERCH": {
+        "HOMEPAGE BANNERS": {
+            "bloc_guidelines": {
+                "copy_in_image": {
+                    "nb_characters": "80 characters",
+                    "content_guidelines": "Purpose: Clearly communicate a key offer or benefit that directly appeals to the target audience.\nTone: Simple, direct, and engaging. The message should be straightforward without any unnecessary words.\nLength: Keep the text concise, ideally within one sentence.\nContent Structure:\nStart with the primary offer or benefit (e.g., discount, reward points, price guarantee).\nHighlight the specific condition or action needed to avail the offer (e.g., \"on your next stay,\" \"for members of ALL\").\nFocus on value proposition or exclusivity if applicable (e.g., \"best price guaranteed,\" \"members of ALL\").\nLanguage: Use action-oriented language that motivates immediate engagement. Avoid jargon or overly complex terms.",
+                    "reference_content": "Get 4X Reward point on your next stay in one of our new hotels"
+                },
+                "CTA": {
+                    "nb_characters": "20 characters",
+                    "content_guidelines": "Text: Always use a clear, action-focused CTA.\nTone: Encouraging and direct, prompting the user to take immediate action.\nLength: Keep the CTA short, typically two words (e.g., \"Book now\").",
+                    "reference_content": "Book now"
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "copy_in_image-CTA",
+                "nested_structure": ""
+            }
+        }
+    }
+}

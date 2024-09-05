@@ -1,0 +1,149 @@
+EXAMPLE:
+
+PRE-HEADER
+Subject line
+Pullman has the best of both worlds, <%= recipient.firstName %>
+
+Pre-header		
+Stay for longer when you book
+
+
+MAIN OFFER
+Title		
+You can have it all
+
+Body Text
+"Business? Leisure? Why choose, when you can have both? 
+Wherever business takes you, stay and play for longer. More, more, more.
+Enterprising playgrounds and inspiring cities are waiting."
+
+CTA
+Book your stay
+
+
+SECONDARY BLOC
+Tagline 1 (Title)		
+You can have it all
+
+Tagline 2 (Short Title)		
+Book a longer getaway
+
+Tagline 3
+& enjoy your trip for longer
+
+Body Text		
+"Wherever business takes you, stay and play for longer. 
+Enterprising playgrounds and inspiring cities are waiting."
+
+Call to action		
+Book your stay
+
+
+---
+
+EXAMPLE:
+BRIEF
+Use Bleisure trend to secure longer bookings and increased revenue​
+
+
+PRE-HEADER
+Subject line		
+Time to close the laptop, <%= recipient.firstName %>
+Pre-header		
+Turn your next work trip into an adventure
+
+
+MAIN OFFER
+Title		
+Your time is yours
+
+Body Text		
+"Work can sometimes takeover however usiness and leisure blend in new ways at Pullman hotels.
+You can have it all. Once the laptop is closed, delve into a the culture of a new city. 
+Explore, relax, get inspired."
+
+CTA	
+Book a city stay 
+
+
+SECONDARY BLOC
+Tagline 1 (Title)		
+Your time is yours
+
+Tagline 2 (Short Title)		
+Time to explore a new city
+
+Tagline 3 (Teaser)		
+So..., where to next?
+
+Body Text		
+"Book a longer stay and delve into a new city.
+You deserve a break. Once work is done, relax, explore and get inspired with Pullman. "
+
+Call to action		
+Book a city stay
+
+
+---
+
+EXAMPLE:
+BRIEF:
+The flexible rate is a consistent part of Pullman’s messaging to customers. It ensures people can cancel up to the day before their stay is due to begin without penalty. 
+It aligns with their customer focus being on on-the-go, busy, hustle lifestyle. 
+
+MAIN OFFER
+Title		
+Flexibility to stay, your way
+
+Body Text		
+"Because life moves fast, you need a stay that can keep up. 
+Book a city break in Toulouse, Paris or more enticing destinations without risk.
+With our flexible rate, cancel your booking up to 24 hours before check-in."
+
+CTA		
+Book today
+
+
+SECONDARY BLOC		
+Tagline 1 (Title)		
+Stay flexible
+
+Tagline 2 (Short Title)		
+Enjoy free 24hr cancellations
+
+Tagline 3 (Teaser)		
+With our most flexible rate
+
+Body Text		
+"Book a city break in Toulouse, Paris or more enticing destinations without risk.
+Because life moves fast."
+
+Call to action		
+Book now
+
+
+---
+
+EXAMPLE:
+HEADER BLOC
+Subject  Line 		
+Time to make your stay work for you, %%=ProperCase(First_Name)=%%
+
+E-card Title		
+Work smarter. Play harder. Don't wait.
+
+
+MAIN OFFER BLOC 2
+Title		
+Book an extended stay
+
+Subtitle 		
+Blend business & pleasure
+
+Text		
+"Don't wait till 'next time'. Extend your stay and save now when you book 3 nights or more with Pullman.
+Upcoming work trip? It's now a weekend away, too. WFH? You just made it Work From Hotel.
+Plus, members of ALL enjoy an extra up to 10% off stays in Europe and North Africa."
+
+CTA		
+Book Now

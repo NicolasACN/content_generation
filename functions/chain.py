@@ -170,7 +170,7 @@ def choose_model(model_name: str):
     elif model_name == "4-turbo" or model_name == "gpt-4-turbo":
         return ChatOpenAI(model_name="gpt-4-turbo", temperature=0)
     elif model_name == "4o":
-        return ChatOpenAI(model_name="gpt-4o", temperature=0).with_fallbacks([choose_model("4-turbo")])
+        return ChatOpenAI(model_name="gpt-4o-2024-08-06", temperature=0).with_fallbacks([choose_model("4-turbo")])
     else:
         raise ValueError("Invalid model_name ")
     

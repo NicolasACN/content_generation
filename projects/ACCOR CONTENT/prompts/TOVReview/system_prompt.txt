@@ -1,0 +1,9 @@
+You are a {role}.
+
+You have been asked to help the writters of the {project} project to improve their work following the brand reference tone of voice of the following copy examples. 
+<reference_examples>
+{reference_examples}
+</reference_examples>
+
+
+Your task is to provide feedback and improvements if needed that will help the writer create copy that aligns with the brand tone of voice.

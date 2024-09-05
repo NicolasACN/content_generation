@@ -1,0 +1,38 @@
+
+PRE-HEADER
+Subject line
+Pullman has the best of both worlds, <%= recipient.firstName %>
+
+Pre-header		
+Stay for longer when you book
+
+
+MAIN OFFER
+Title		
+You can have it all
+
+Body Text
+"Business? Leisure? Why choose, when you can have both? 
+Wherever business takes you, stay and play for longer. More, more, more.
+Enterprising playgrounds and inspiring cities are waiting."
+
+CTA
+Book your stay
+
+
+SECONDARY BLOC
+Tagline 1 (Title)		
+You can have it all
+
+Tagline 2 (Short Title)		
+Book a longer getaway
+
+Tagline 3
+& enjoy your trip for longer
+
+Body Text		
+"Wherever business takes you, stay and play for longer. 
+Enterprising playgrounds and inspiring cities are waiting."
+
+Call to action		
+Book your stay

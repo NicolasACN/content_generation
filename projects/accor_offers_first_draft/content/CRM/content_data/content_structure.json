@@ -1,0 +1,53 @@
+{
+    "MAIN PAGE": {
+        "MAIN OFFER": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "26 characters",
+                    "content_guidelines": "Guideline:\n\nClear and Direct: State the primary benefit or offer clearly.\nEngaging: Use compelling language that grabs attention.\nRelevant: Relate directly to the target audience's needs or desires.",
+                    "reference_content": "\"Experience Flexibility Like Never Before\"\n\"Book Longer, Save More\"\n\"Your Perfect Stay Awaits\"\n"
+                },
+                "description": {
+                    "nb_characters": "150 characters",
+                    "content_guidelines": "Describe the Offer: Clearly explain what is being offered.\nHighlight Benefits: Emphasize the key benefits and features.\nEncourage Action: Include a call to action that motivates the reader to book.",
+                    "reference_content": "\"Book a stay in our luxurious hotels and enjoy the perfect blend of business and leisure. Extend your stay to explore more and save more. Flexible cancellation options available.\"\n\"Turn your work trip into a mini-vacation. Book now and enjoy up to 10% off stays in Europe and North Africa. Discover inspiring cities and make the most of your travel.\"\n\"Need flexibility? Our flexible rate allows you to cancel up to 24 hours before check-in without penalty. Book a city break and stay your way.\""
+                },
+                "cta": {
+                    "nb_characters": "21 characters",
+                    "content_guidelines": "Action-Oriented: Use verbs that encourage immediate action.\nClear: Make it clear what the reader needs to do next.\nUrgency: Create a sense of urgency or exclusivity.",
+                    "reference_content": "\"Book Now\"\n\"Reserve Your Stay\"\n\"Plan Your Trip Today\""
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "title-description-cta",
+                "nested_structure": ""
+            }
+        },
+        "SECONDARY BLOC": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "26 characters",
+                    "content_guidelines": "Guideline:\n\nClear and Direct: State the primary benefit or offer clearly.\nEngaging: Use compelling language that grabs attention.\nRelevant: Relate directly to the target audience's needs or desires.",
+                    "reference_content": "\"Experience Flexibility Like Never Before\"\n\"Book Longer, Save More\"\n\"Your Perfect Stay Awaits\"\n"
+                },
+                "kicker": {
+                    "nb_characters": "26 characters",
+                    "content_guidelines": "Catchy and Memorable: Create phrases that are easy to remember.\nHighlight Key Points: Focus on the main selling points or benefits.\nBrief: Keep it concise and to the point.\n",
+                    "reference_content": "\"Stay Longer, Enjoy More\"\n\"Explore More, Worry Less\"\n\"Flexibility at Your Fingertips\"\n"
+                },
+
+                "cta": {
+                    "nb_characters": "21 characters",
+                    "content_guidelines": "Action-Oriented: Use verbs that encourage immediate action.\nClear: Make it clear what the reader needs to do next.\nUrgency: Create a sense of urgency or exclusivity.",
+                    "reference_content": "\"Book Now\"\n\"Reserve Your Stay\"\n\"Plan Your Trip Today\""
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "title-kicker-cta",
+                "nested_structure": ""
+            }
+        }
+    }
+}

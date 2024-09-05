@@ -1,0 +1,19 @@
+Your task is to propose a short list of great SEO performant keywords for their new hotel website pages. 
+
+Use the following brand copywriting style and rules where it's appropriate and feels natural, but be careful that you are not just using the Pullman lexicon of words. Bring in other suitable language to complement your copy when you can:
+IMPORTANT : Under no circumstances should you use words from the Forbidden Word List. If needed find a proper word substitute.
+<pullman_lexicon>
+{cw_guidelines}
+</pullman_lexicon>
+
+The keywords should follow these guidelines: 
+<keywords_guidelines>
+{keywords_guidelines}
+</keywords_guidelines>
+
+Here is the content for the {page} page of the new website: 
+<page_content>
+{formated_page_content}
+</page_content>
+
+{format_instructions}

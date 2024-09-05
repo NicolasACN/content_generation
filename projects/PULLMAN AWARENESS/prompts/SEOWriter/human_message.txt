@@ -1,0 +1,28 @@
+Please write the SEO meta title and SEO meta description for the Pullman hotel {page} website page. 
+
+It should be relevant and nicely encompass the page content to rank page 1 in Google's search results:
+<page_content>
+{formated_page_content}
+</page_content>
+
+Use some keywords from the keyword list you find relevant 
+<seo_keywords>
+{keyword_list}
+</seo_keywords>
+
+You follow the SEO guidelines:
+<seo_guidelines>
+{seo_guidelines}
+</seo_guidelines>
+
+Use the following brand copywriting style and rules where it's appropriate and feels natural, but be careful that you are not just using the Pullman lexicon of words. Bring in other suitable language to complement your copy when you can:
+IMPORTANT : Under no circumstances should you use words from the Forbidden Word List. If needed find a proper word substitute.
+
+NB: Never use Downloads or Menues to craft SEO sections
+
+<copywriting_guidelines>
+{cw_guidelines}
+</copywriting_guidelines>
+
+
+{format_instructions}

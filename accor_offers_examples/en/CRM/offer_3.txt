@@ -1,0 +1,33 @@
+BRIEF:
+The flexible rate is a consistent part of Pullman’s messaging to customers. It ensures people can cancel up to the day before their stay is due to begin without penalty. 
+It aligns with their customer focus being on on-the-go, busy, hustle lifestyle. 
+
+MAIN OFFER
+Title		
+Flexibility to stay, your way
+
+Body Text		
+"Because life moves fast, you need a stay that can keep up. 
+Book a city break in Toulouse, Paris or more enticing destinations without risk.
+With our flexible rate, cancel your booking up to 24 hours before check-in."
+
+CTA		
+Book today
+
+
+SECONDARY BLOC		
+Tagline 1 (Title)		
+Stay flexible
+
+Tagline 2 (Short Title)		
+Enjoy free 24hr cancellations
+
+Tagline 3 (Teaser)		
+With our most flexible rate
+
+Body Text		
+"Book a city break in Toulouse, Paris or more enticing destinations without risk.
+Because life moves fast."
+
+Call to action		
+Book now

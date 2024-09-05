@@ -1,0 +1,37 @@
+Write a text for the {project} project in the style of a {role}. The text should be composed in {language}.
+
+The brief of the content is : 
+<content_brief>
+{content_brief}
+</content_brief>
+
+The text should strictly follow the structure provided, respect the max nb_characters and adhere to the guidelines for each element in the structure:
+<structure_and_section_guidelines>
+{formated_bloc_guidelines}
+<structure_and_section_guidelines>
+
+Incorporate some of the following data to craft intellectually evocative stories for the readers.
+<section_data>
+{formated_bloc_data}
+<section_data>
+
+Another writer wrote the following draft:
+<written_draft>
+{generated_text}
+<written_draft>
+
+You are working with brand experts that have written the following feedbacks on the draft to help you improve it. Please take onboard their guidance and in particular if they request a word is not used please ensure that word isn't included in any future text. 
+
+Branding and Marketing feedback: 
+<brand_and_marketing_feedback>
+{bm_review}
+<brand_and_marketing_feedback>
+
+Brand copywriting feedback: 
+<copywriting_feedback>
+{cw_review}
+<copywriting_feedback>
+
+Please improve the text you wrote.
+
+{format_instructions}

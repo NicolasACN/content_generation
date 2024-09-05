@@ -1,0 +1,22 @@
+HEADER BLOC
+Subject  Line 		
+Time to make your stay work for you, %%=ProperCase(First_Name)=%%
+
+E-card Title		
+Work smarter. Play harder. Don't wait.
+
+
+MAIN OFFER BLOC 2
+Title		
+Book an extended stay
+
+Subtitle 		
+Blend business & pleasure
+
+Text		
+"Don't wait till 'next time'. Extend your stay and save now when you book 3 nights or more with Pullman.
+Upcoming work trip? It's now a weekend away, too. WFH? You just made it Work From Hotel.
+Plus, members of ALL enjoy an extra up to 10% off stays in Europe and North Africa."
+
+CTA		
+Book Now

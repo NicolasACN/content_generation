@@ -1,0 +1,40 @@
+BRIEF
+Use Bleisure trend to secure longer bookings and increased revenue​
+
+
+PRE-HEADER
+Subject line		
+Time to close the laptop, <%= recipient.firstName %>
+Pre-header		
+Turn your next work trip into an adventure
+
+
+MAIN OFFER
+Title		
+Your time is yours
+
+Body Text		
+"Work can sometimes takeover however usiness and leisure blend in new ways at Pullman hotels.
+You can have it all. Once the laptop is closed, delve into a the culture of a new city. 
+Explore, relax, get inspired."
+
+CTA	
+Book a city stay 
+
+
+SECONDARY BLOC
+Tagline 1 (Title)		
+Your time is yours
+
+Tagline 2 (Short Title)		
+Time to explore a new city
+
+Tagline 3 (Teaser)		
+So..., where to next?
+
+Body Text		
+"Book a longer stay and delve into a new city.
+You deserve a break. Once work is done, relax, explore and get inspired with Pullman. "
+
+Call to action		
+Book a city stay

@@ -50,6 +50,9 @@ if 'content_template' not in st.session_state:
     st.session_state['content_template'] = ""
 if 'role' not in st.session_state:
     st.session_state['role'] = ""
+if 'brief' not in st.session_state:
+    st.session_state['brief'] = ""
+
 
 # Function to create project directory structure
 def create_project_structure(project_name, project_brief):
@@ -109,10 +112,19 @@ def load_project_details(project_name):
         load_copywriting_guidelines(project_name)
         load_reference_examples(project_name)
         load_role(project_name)
+        
+        # Load brief
+        brief_path = os.path.join(project_path, "data", "content", "brief", "brief.txt")
+        if os.path.exists(brief_path):
+            with open(brief_path, "r") as f:
+                st.session_state.brief = f.read()
+        else:
+            st.session_state.brief = ""
 
         st.success(f"Project '{project_name}' loaded successfully!")
     except Exception as e:
         st.error(f"Error loading project details: {e}")
+
 
 
 # Function to setup content template
@@ -384,6 +396,19 @@ with tab3:
                         st.success(f"Template '{selected_template}' loaded successfully!")
                     except Exception as e:
                         st.error(f"Error loading template '{selected_template}': {e}")
+    
+    # Content brief
+    with st.expander("Content Brief", expanded=False):
+        st.session_state.brief = st.text_area("Enter content brief", value=st.session_state.brief, height=100)
+        if st.button("Save Content Brief"):
+            if st.session_state.project_name:
+                brief_path = os.path.join(os.getcwd(), "projects", st.session_state.project_name, "data", "content", "brief", "brief.txt")
+                os.makedirs(os.path.dirname(brief_path), exist_ok=True)
+                with open(brief_path, "w") as f:
+                    f.write(st.session_state.brief)
+                st.success("Content brief saved successfully.")
+            else:
+                st.error("Project name is required to save the content brief.")
 
     # Structure Section
     with st.expander("Create Content Structure", expanded=False):
@@ -533,17 +558,28 @@ with tab3:
                 
                 model = choose_model("4-turbo")
 
-                generated_content = generate_content(content_data=st.session_state['filled_data'], reference_examples=st.session_state.reference_examples, role=st.session_state.role, project=st.session_state.project_name, prompt_folder=prompt_folder, brand_knowledge=st.session_state['brand_knowledge'], cw_guidelines=st.session_state['copywriting_guidelines'], model=model)
+                generated_content = generate_content(
+                    content_data=st.session_state['filled_data'], 
+                    reference_examples=st.session_state.reference_examples, 
+                    role=st.session_state.role, 
+                    project=st.session_state.project_name, 
+                    prompt_folder=prompt_folder, 
+                    brand_knowledge=st.session_state['brand_knowledge'], 
+                    cw_guidelines=st.session_state['copywriting_guidelines'], 
+                    model=model,
+                    content_brief=st.session_state['brief']  # Pass the brief here
+                )
                 st.session_state['generated_content'] = generated_content
                 
                 # Preview generated content
                 formated_content = dict_to_markdown(st.session_state['generated_content'])
                 st.markdown(formated_content)
-                
+    
                 # Save Generated Content
                 with open(os.path.join(save_path, 'generated_content.json'), 'w') as f:
                     json.dump(st.session_state['generated_content'], f, indent=4)
                     st.success(f"Content saved successfully in {save_path}")
+
                     
             # if 'generated_content' in st.session_state and st.session_state['generated_content']:
             #     # Folder selection and saving content

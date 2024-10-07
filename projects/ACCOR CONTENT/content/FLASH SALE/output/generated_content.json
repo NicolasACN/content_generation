@@ -1,31 +1,40 @@
 {
     "E-MERCH": {
         "HOMEPAGE BANNERS": {
-            "copy_in_image": "Save 20% plus extra rewards as an Accor Loyalty Member",
-            "CTA": "Discover More"
+            "copy_in_image": "Enjoy an exclusive 20% discount with an additional 10% off for ALL members across Europe and North America.",
+            "CTA": "Book Now"
+        },
+        "LANDING PAGE": {
+            "title": "Private Flash Sale 2024: 20% Off for Members Only!",
+            "description": "As autumn unveils its palette of vibrant hues, our Private Flash Sale 2024 invites you to immerse yourself in the enchanting landscapes of Europe and North Africa. Experience the allure of the season at a more inviting price. Picture yourself meandering through ancient alleyways, savouring exquisite local dishes, or relaxing in sumptuous surroundings\u2014all with a delightful 20% saving.\n\nThis exclusive offer is available from 23rd to 27th September 2024, for stays between 4th October and 12th November 2024. Tailored for our ALL members, this promotion ensures an unparalleled experience and superb value. Not a member yet? Sign up now to access this special rate and enjoy an additional discount of up to 10% in Europe and North Africa. Moreover, booking through our ALL.com app grants you an extra 20% in Reward points. Act swiftly\u2014this opportunity ends soon. Embark on an enchanting autumn journey with us.",
+            "cta_label": "Book now",
+            "list_usp_title1": "Autumn Escapes in Europe and North Africa",
+            "list_usp_title2": "Book by 27th September for Exclusive Savings",
+            "list_usp_title3": "Stay from 4th October to 12th November",
+            "list_usp_title4": "Exclusive 20% Off for ALL Members"
         }
     },
     "SOCIAL ADS": {
         "LINK AD": {
-            "title": "Hurry, Experience 20% Off! Discover Autumn's Elegance in Europe & North Africa",
-            "description": "EXCLUSIVE 20% DISCOUNT FOR ALL MEMBERS! BOOK FROM 23.09 - 27.09 FOR STAYS BETWEEN 4.10 AND 12.11. EMBRACE SUSTAINABILITY AND INNOVATION.",
-            "catchy_slogan": "Embrace the Season with Style!",
-            "cta": "Explore Exclusive Rates and Experiences with ALL \u2013 Join Now!"
+            "title": "Discover Your Luxurious Autumn Retreat - Enjoy 20% Off",
+            "description": "Exclusive 20% off for ALL members! Book from 23.09 to 27.09 for stays between 4.10 and 12.11.",
+            "catchy_slogan": "Autumn Adventures Await!",
+            "cta": "Book Now on ALL.com"
         },
         "META CAROUSEL": {
-            "title": "Indulge for Less: 20% Off for ALL Members Across Europe & North Africa",
-            "copy_on_image1": "20% OFF FOR ALL MEMBERS - EXCLUSIVELY YOURS",
-            "catchy_slogan1": "Indulge in Exclusive Moments",
-            "cta1": "EXPLORE NOW on ALL.com",
-            "copy_on_image2": "ENJOY AN EXTRA 10% OFF in Europe & NA",
-            "catchy_slogan2": "Travel More, Save More",
-            "cta2": "SEE MORE on ALL.com",
-            "copy_on_image3": "BOOK VIA APP FOR 20% MORE REWARD POINTS",
-            "catchy_slogan3": "Enhance Your Journey",
-            "cta3": "DOWNLOAD & DISCOVER",
-            "copy_on_blue_background": "EXPERIENCE MORE WITH EXCLUSIVE MEMBER RATES",
-            "catchy_slogan4": "Your Gateway to Luxury",
-            "cta4": "JOIN US & SAVE on ALL.com"
+            "title": "Unlock Exclusive Savings! 20% Off for ALL Members Across Europe & North Africa",
+            "copy_on_image1": "20% OFF FOR ALL MEMBERS! Book with an extra bonus on the ALL.com app.",
+            "catchy_slogan1": "Unlock Exclusive Savings!",
+            "cta1": "BOOK NOW on ALL.com",
+            "copy_on_image2": "DON'T MISS OUT! Secure an additional 10% off in Europe and North Africa.",
+            "catchy_slogan2": "Your Next Adventure, For Less!",
+            "cta2": "DISCOVER MORE on ALL.com",
+            "copy_on_image3": "LAST CHANCE! Secure your spot with 20% off.",
+            "catchy_slogan3": "Hurry, Book Your Stay!",
+            "cta3": "JOIN & SAVE on ALL.com",
+            "copy_on_blue_background": "MEMBERS ONLY: 20% OFF YOUR STAY",
+            "catchy_slogan4": "Book. Stay. Save.",
+            "cta4": "EXPLORE DEALS on ALL.com"
         }
     }
 }

@@ -89,3 +89,4 @@ python-dotenv
 openai
 langchain
 langchain_openai
+openpyxl

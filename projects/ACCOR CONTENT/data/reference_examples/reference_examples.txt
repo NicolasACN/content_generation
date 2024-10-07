@@ -1,149 +1,57 @@
-EXAMPLE:
+REFERENCE TONE OF VOICE FROM PREVIOUS EXAMPLES
 
-PRE-HEADER
-Subject line
-Pullman has the best of both worlds, <%= recipient.firstName %>
+EX1
+title: Let's keep celebrating France. Save 15% on 2 nights min. stays
+description: Fancy a late-summer trip? To keep celebrating France we're launching a special offer for stays between 1st September and 3rd November. How does 15% off minimum 2 night stays* sound?
 
-Pre-header		
-Stay for longer when you book
+From chic cities to spectacular coastline and from tranquil countryside to captivating market towns, France has so much to tempt you with. So, where will you go? Choose from 1600+ hotels across France.
 
+Book by 12th August and give yourself a late summer break in France to really look forward to.
 
-MAIN OFFER
-Title		
-You can have it all
-
-Body Text
-"Business? Leisure? Why choose, when you can have both? 
-Wherever business takes you, stay and play for longer. More, more, more.
-Enterprising playgrounds and inspiring cities are waiting."
-
-CTA
-Book your stay
-
-
-SECONDARY BLOC
-Tagline 1 (Title)		
-You can have it all
-
-Tagline 2 (Short Title)		
-Book a longer getaway
-
-Tagline 3
-& enjoy your trip for longer
-
-Body Text		
-"Wherever business takes you, stay and play for longer. 
-Enterprising playgrounds and inspiring cities are waiting."
-
-Call to action		
-Book your stay
-
+Plus, if you join ALL,  you can enjoy up to 5% more off. 
+cta1_label: Book now
+list_usp_title1: Late summer breaks in beautiful France 
+list_usp_title2: Save when you book by 12th August
+list_usp_title3: Min. 2 night stays - 1st September to 3rd November
+list_usp_title4: 1,600+ hotels are waiting to welcome you
 
 ---
 
-EXAMPLE:
-BRIEF
-Use Bleisure trend to secure longer bookings and increased revenue​
+EX2
+title: Our Summer Sale is here! Save 25% on min. 3 night stays
+description: Soak up the sun, fun and savings with exclusive early Summer Sale access. 
 
+Enjoy an amazing 25% off bookings* of 3 nights or longer this summer. Book by 4th June 2024, for stays between 5th July and 8th September 2024**.
 
-PRE-HEADER
-Subject line		
-Time to close the laptop, <%= recipient.firstName %>
-Pre-header		
-Turn your next work trip into an adventure
+We're waiting to welcome you to 1,000s of hotels across Europe and North Africa. Where will your summer getaway take you? A romantic city break? Some sunshine for the family? Whatever you choose, book it now and save 25%. And as a member of ALL, you can take advantage of our sale prices before everyone else. Even better, as a member of ALL, you'll also enjoy up to 10% extra off our already sensational Summer Sale prices!
 
+Book now with your exclusive early access and take advantage of our sale prices before everyone else.
 
-MAIN OFFER
-Title		
-Your time is yours
-
-Body Text		
-"Work can sometimes takeover however usiness and leisure blend in new ways at Pullman hotels.
-You can have it all. Once the laptop is closed, delve into a the culture of a new city. 
-Explore, relax, get inspired."
-
-CTA	
-Book a city stay 
-
-
-SECONDARY BLOC
-Tagline 1 (Title)		
-Your time is yours
-
-Tagline 2 (Short Title)		
-Time to explore a new city
-
-Tagline 3 (Teaser)		
-So..., where to next?
-
-Body Text		
-"Book a longer stay and delve into a new city.
-You deserve a break. Once work is done, relax, explore and get inspired with Pullman. "
-
-Call to action		
-Book a city stay
-
+*Terms and conditions apply
+ 
+** Extended staying period from 21st June 2024 to 8th September 2024 for participating Sofitel and MGallery hotels.
+cta1_label: Book now
+list_usp_title1: Exclusive members only access 
+list_usp_title2: Save when you book before 4th June
+list_usp_title3: For min. 3 night stays between 5th July & 8th September
+list_usp_title4: 1,000s of hotels across Europe and North Africa
 
 ---
 
-EXAMPLE:
-BRIEF:
-The flexible rate is a consistent part of Pullman’s messaging to customers. It ensures people can cancel up to the day before their stay is due to begin without penalty. 
-It aligns with their customer focus being on on-the-go, busy, hustle lifestyle. 
+EX3
+title: Our Winter Sale is now on! Save 25% off on 2+ nights stays
+description: End the year with a dusting of travel magic. Start the new one with a trip to remember. Or plan an extra-special Christmas gift.
 
-MAIN OFFER
-Title		
-Flexibility to stay, your way
+Enjoy 25% off winter stays of 2+ nights * when you book by 16th November 2023, for stays between 15th December 2023 and 3rd March 2024. **
 
-Body Text		
-"Because life moves fast, you need a stay that can keep up. 
-Book a city break in Toulouse, Paris or more enticing destinations without risk.
-With our flexible rate, cancel your booking up to 24 hours before check-in."
+Explore thousands of our hotels across Europe and North Africa in participating hotels, where winter wonderlands and indulgent seasonal eats await. And if you aren’t a member already, join ALL for an additional up to 10% off with our members’ rate on selected European getaways.
 
-CTA		
-Book today
+So… where will your winter wanderlust take you?
 
-
-SECONDARY BLOC		
-Tagline 1 (Title)		
-Stay flexible
-
-Tagline 2 (Short Title)		
-Enjoy free 24hr cancellations
-
-Tagline 3 (Teaser)		
-With our most flexible rate
-
-Body Text		
-"Book a city break in Toulouse, Paris or more enticing destinations without risk.
-Because life moves fast."
-
-Call to action		
-Book now
-
-
----
-
-EXAMPLE:
-HEADER BLOC
-Subject  Line 		
-Time to make your stay work for you, %%=ProperCase(First_Name)=%%
-
-E-card Title		
-Work smarter. Play harder. Don't wait.
-
-
-MAIN OFFER BLOC 2
-Title		
-Book an extended stay
-
-Subtitle 		
-Blend business & pleasure
-
-Text		
-"Don't wait till 'next time'. Extend your stay and save now when you book 3 nights or more with Pullman.
-Upcoming work trip? It's now a weekend away, too. WFH? You just made it Work From Hotel.
-Plus, members of ALL enjoy an extra up to 10% off stays in Europe and North Africa."
-
-CTA		
-Book Now
+*Terms and conditions apply
+** Extended staying period from 17th November 2023 to 3rd March 2024 for participating Sofitel and MGallery hotels.
+cta1_label: Book now
+list_usp_title1: Book by 16th November 2023
+list_usp_title2: For stays between 15 December 2023 and 3 March 2024
+list_usp_title3: In Europa and North Africa
+list_usp_title4: Earlier stay dates for Sofitel and MGallery

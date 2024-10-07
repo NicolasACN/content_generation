@@ -1,1 +1,172 @@
-{}
+{
+    "E-MERCH": {
+        "HOMEPAGE BANNERS": {
+            "bloc_guidelines": {
+                "copy_in_image": {
+                    "nb_characters": "80 characters",
+                    "content_guidelines": "Purpose: Clearly communicate a key offer or benefit that directly appeals to the target audience.\nTone: Simple, direct, and engaging. The message should be straightforward without any unnecessary words.\nLength: Keep the text concise, ideally within one sentence.\nContent Structure:\nStart with the primary offer or benefit (e.g., discount, reward points, price guarantee).\nHighlight the specific condition or action needed to avail the offer (e.g., \"on your next stay,\" \"for members of ALL\").\nFocus on value proposition or exclusivity if applicable (e.g., \"best price guaranteed,\" \"members of ALL\").\nLanguage: Use action-oriented language that motivates immediate engagement. Avoid jargon or overly complex terms.",
+                    "reference_content": "Get 4X Reward point on your next stay in one of our new hotels"
+                },
+                "CTA": {
+                    "nb_characters": "20 characters",
+                    "content_guidelines": "Text: Always use a clear, action-focused CTA.\nTone: Encouraging and direct, prompting the user to take immediate action.\nLength: Keep the CTA short, typically two words (e.g., \"Book now\").",
+                    "reference_content": "Book now"
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "copy_in_image-CTA",
+                "nested_structure": ""
+            }
+        },
+        "LANDING PAGE": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "70",
+                    "content_guidelines": "Cover name of offer, if a common one (i.e.. Winter sale, private flash sale, etc); include percentage discount alongside minimum stay nights, for Omnibus requirements. If the offer is specific to members, we would highlight this in the title too when possible (Members-only). Options can be considered too, that not include all details, so please do provide multiple alternatives. ",
+                    "reference_content": "Let's keep celebrating France. Save 15% on 2 nights min. stays"
+                },
+                "description": {
+                    "nb_characters": "900",
+                    "content_guidelines": "First paragraph more inspirational, connecting the offer stay period with the seasonality, topic or destinations covered (in most cases Europe and North Africa, unless specified differently).\n\nSecond paragraph is more focus on showcasing the offer details and mechanism, covering booking dates and stay dates, and the discount offered (to points offer, if a Rewards point offer instead of a discount). Still connecting it to the first paragraph, so it is not too mechanic, and still feels exciting.\n\nThe rest of the paragraph is about pushing booking before the dn of the booking period and to remind readers of the additional up to 10% they can benefit from if they are members of ALL (encouraging sign ups if they aren't).",
+                    "reference_content": "Fancy a late-summer trip? To keep celebrating France we're launching a special offer for stays between 1st September and 3rd November. How does 15% off minimum 2 night stays* sound?\n\nFrom chic cities to spectacular coastline and from tranquil countryside to captivating market towns, France has so much to tempt you with. So, where will you go? Choose from 1600+ hotels across France.\n\nBook by 12th August and give yourself a late summer break in France to really look forward to.\n\nPlus, if you join ALL,  you can enjoy up to 5% more off. "
+                },
+                "cta_label": {
+                    "nb_characters": "",
+                    "content_guidelines": "MUST BE \"Book now\"",
+                    "reference_content": "Book now"
+                },
+                "list_usp_title1": {
+                    "nb_characters": "55",
+                    "content_guidelines": "Without specific order, the UPS cover Book by specified dates, Stay dates, Region and or number of participating hotels (when provided), and exclusivity for members, if a members-only offer. The idea with the USPs is for the user to really get the main benefits and reasons why they should book this offer, without needing to read the full copy.",
+                    "reference_content": "Late summer breaks in beautiful France "
+                },
+                "list_usp_title2": {
+                    "nb_characters": "55",
+                    "content_guidelines": "Without specific order, the UPS cover Book by specified dates, Stay dates, Region and or number of participating hotels (when provided), and exclusivity for members, if a members-only offer. The idea with the USPs is for the user to really get the main benefits and reasons why they should book this offer, without needing to read the full copy.",
+                    "reference_content": "Save when you book by 12th August"
+                },
+                "list_usp_title3": {
+                    "nb_characters": "55",
+                    "content_guidelines": "Without specific order, the UPS cover Book by specified dates, Stay dates, Region and or number of participating hotels (when provided), and exclusivity for members, if a members-only offer. The idea with the USPs is for the user to really get the main benefits and reasons why they should book this offer, without needing to read the full copy.",
+                    "reference_content": "Min. 2 night stays - 1st September to 3rd November"
+                },
+                "list_usp_title4": {
+                    "nb_characters": "55",
+                    "content_guidelines": "Without specific order, the UPS cover Book by specified dates, Stay dates, Region and or number of participating hotels (when provided), and exclusivity for members, if a members-only offer. The idea with the USPs is for the user to really get the main benefits and reasons why they should book this offer, without needing to read the full copy.",
+                    "reference_content": "1,600+ hotels are waiting to welcome you"
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "title-description-cta_label-list_usp_title1-list_usp_title2-list_usp_title3-list_usp_title4",
+                "nested_structure": ""
+            }
+        }
+    },
+    "SOCIAL ADS": {
+        "LINK AD": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "90",
+                    "content_guidelines": "Guideline: The title should be engaging and urgent, highlighting the key offer and relevant details, such as the discount percentage, booking conditions (e.g., minimum nights), and geographical focus if applicable.\nStructure: Start with a compelling action or urgency phrase (e.g., \"Hurry,\" \"Enjoy,\" \"Let\u2019s keep celebrating\"), followed by the specific discount and terms.\nTone: Direct and promotional.",
+                    "reference_content": "Examples:\n\"Spring Sale is now on! Enjoy 20% off* on min. 2 night stays across Europe & North Africa.\"\n\"Let\u2019s keep celebrating France with 15% off min 2. night stays. Book by 12th August.\"\n\"Hurry, our Summer Sale won't last forever! Book today for 25% off* min. 3 night stays.\""
+                },
+                "description": {
+                    "nb_characters": "90",
+                    "content_guidelines": "Guideline: The description should reinforce the promotional aspect in a bold, simple format, focusing on key information such as the percentage discount and any notable dates.\nStructure: Use short, direct statements with all caps, emphasizing the sale, the discount, and conditions.\nTone: Bold, confident, and time-sensitive.",
+                    "reference_content": "\"FIND YOUR NEW HAPPY PLACE\"\n\"CELEBRATE FRANCE WITH 15% OFF MIN. 2 NIGHT STAYS\"\n\"SUMMER SALE ENDS 4TH JUNE 25% OFF* MIN. 3 NIGHT STAYS\""
+                },
+                "catchy_slogan": {
+                    "nb_characters": "50",
+                    "content_guidelines": "Guideline: The slogan should be a memorable phrase that reflects the urgency or celebratory nature of the campaign, connecting emotionally with the audience.\nStructure: Short, catchy, and reflective of the promotion or occasion.\nTone: Friendly, motivating, and relevant to the theme.",
+                    "reference_content": "Examples:\n\"Save when you book early!\"\n\"Let's celebrate France\"\n\"Sale ends 4th June\""
+                },
+                "cta": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The CTA should be clear and action-driven, guiding the audience towards the booking platform, ALL.com.\nStructure: Direct call to book or save, often mentioning the exclusivity of booking on the platform.\nTone: Persuasive and action-oriented.",
+                    "reference_content": "Examples:\n\"Book only on ALL.com\"\n\"Save 15% on minimum 2 night stays\"\n\"Book only on ALL.com\""
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "title-description-catchy_slogan-cta",
+                "nested_structure": ""
+            }
+        },
+        "META CAROUSEL": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "90",
+                    "content_guidelines": "Guideline: The title should capture attention with an immediate benefit or offer, emphasizing the discount and the exclusivity for members if applicable. Include specifics like the region or booking conditions.\nStructure: Start with a call-to-action phrase (e.g., \"Save on your next stay!\"), followed by details of the offer and geographical scope.\nTone: Promotional, direct, and inclusive of any membership benefits.",
+                    "reference_content": "Examples:\n\"Save on your next stay! Members of ALL get up to 10% off* in Europe and North Africa.\"\n\"Hurry, our Summer Sale won't last forever! Book today for 25% off* min. 3 night stays.\"\n\"Spring Sale is now on! Enjoy 20% off* on min. 2 night stays across Europe & North Africa.\""
+                },
+                "copy_on_image1": {
+                    "nb_characters": "70",
+                    "content_guidelines": "Guideline: The copy on images should be concise, highlighting the main offer and essential booking details. Use short phrases to directly communicate the key message.\nStructure: Typically starts with an announcement or instruction related to the sale, offer percentage, or membership benefits. Information is often segmented to build excitement and clarity.\nTone: Bold, straightforward, and visually impactful.",
+                    "reference_content": "Examples:\n\"MEMBERS OF ALL GET UP TO 10% OFF*\"\n\"SUMMER SALE ENDS 4TH JUNE! 25% OFF* MIN. 3 NIGHT STAYS\"\n\"FIND YOUR NEW HAPPY PLACE 20% OFF SPRING SALE ON MIN. 2 NIGHT STAYS\""
+                },
+                "catchy_slogan1": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The slogan should be short, engaging, and related to the sale theme or the urgency of the offer. It should reinforce the benefits and create a sense of excitement.\nStructure: A simple, catchy line that mirrors the core message of the campaign, often repeated across images for consistency.\nTone: Lively, memorable, and motivating.",
+                    "reference_content": "Examples:\n\"Save up to 10%*\"\n\"QUICK! Summer is here\"\n\"Great spring breaks\""
+                },
+                "cta1": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The CTA should clearly instruct the user to take immediate action, such as booking directly on the platform. It should often emphasize exclusivity or urgency.\nStructure: A direct command such as \u201cBOOK NOW\u201d or \u201cSAVE WHEN YOU BOOK EARLY\u201d followed by a specific instruction like \"only on ALL.com.\"\nTone: Action-oriented, clear, and urgent.\n",
+                    "reference_content": "Examples:\n\"BOOK NOW\"\n\"Book only on ALL.com\"\n\"Save when you book early\""
+                },
+                "copy_on_image2": {
+                    "nb_characters": "70",
+                    "content_guidelines": "Guideline: The copy on images should be concise, highlighting the main offer and essential booking details. Use short phrases to directly communicate the key message.\nStructure: Typically starts with an announcement or instruction related to the sale, offer percentage, or membership benefits. Information is often segmented to build excitement and clarity.\nTone: Bold, straightforward, and visually impactful.\n",
+                    "reference_content": "Examples:\n\"MEMBERS OF ALL GET UP TO 10% OFF*\"\n\"SUMMER SALE ENDS 4TH JUNE! 25% OFF* MIN. 3 NIGHT STAYS\"\n\"FIND YOUR NEW HAPPY PLACE 20% OFF SPRING SALE ON MIN. 2 NIGHT STAYS\"\n"
+                },
+                "catchy_slogan2": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The slogan should be short, engaging, and related to the sale theme or the urgency of the offer. It should reinforce the benefits and create a sense of excitement.\nStructure: A simple, catchy line that mirrors the core message of the campaign, often repeated across images for consistency.\nTone: Lively, memorable, and motivating.",
+                    "reference_content": "Examples:\n\"Save up to 10%*\"\n\"QUICK! Summer is here\"\n\"Great spring breaks\""
+                },
+                "cta2": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The CTA should clearly instruct the user to take immediate action, such as booking directly on the platform. It should often emphasize exclusivity or urgency.\nStructure: A direct command such as \u201cBOOK NOW\u201d or \u201cSAVE WHEN YOU BOOK EARLY\u201d followed by a specific instruction like \"only on ALL.com.\"\nTone: Action-oriented, clear, and urgent.",
+                    "reference_content": "Examples:\n\"BOOK NOW\"\n\"Book only on ALL.com\"\n\"Save when you book early\""
+                },
+                "copy_on_image3": {
+                    "nb_characters": "70",
+                    "content_guidelines": "Guideline: The copy on images should be concise, highlighting the main offer and essential booking details. Use short phrases to directly communicate the key message.\nStructure: Typically starts with an announcement or instruction related to the sale, offer percentage, or membership benefits. Information is often segmented to build excitement and clarity.\nTone: Bold, straightforward, and visually impactful.",
+                    "reference_content": "Examples:\n\"MEMBERS OF ALL GET UP TO 10% OFF*\"\n\"SUMMER SALE ENDS 4TH JUNE! 25% OFF* MIN. 3 NIGHT STAYS\"\n\"FIND YOUR NEW HAPPY PLACE 20% OFF SPRING SALE ON MIN. 2 NIGHT STAYS\"\n"
+                },
+                "catchy_slogan3": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The slogan should be short, engaging, and related to the sale theme or the urgency of the offer. It should reinforce the benefits and create a sense of excitement.\nStructure: A simple, catchy line that mirrors the core message of the campaign, often repeated across images for consistency.\nTone: Lively, memorable, and motivating.",
+                    "reference_content": "Examples:\n\"Save up to 10%*\"\n\"QUICK! Summer is here\"\n\"Great spring breaks\""
+                },
+                "cta3": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The CTA should clearly instruct the user to take immediate action, such as booking directly on the platform. It should often emphasize exclusivity or urgency.\nStructure: A direct command such as \u201cBOOK NOW\u201d or \u201cSAVE WHEN YOU BOOK EARLY\u201d followed by a specific instruction like \"only on ALL.com.\"\nTone: Action-oriented, clear, and urgent.",
+                    "reference_content": "Examples:\n\"BOOK NOW\"\n\"Book only on ALL.com\"\n\"Save when you book early\"\n"
+                },
+                "copy_on_blue_background": {
+                    "nb_characters": "70",
+                    "content_guidelines": "Guideline: This copy should reiterate the main offer or benefit, serving as a strong visual anchor to capture attention. It\u2019s usually the most prominent message on the page.\nStructure: Bold, simple statements that highlight the core benefit or sale condition.\nTone: Direct, commanding, and visually distinct.",
+                    "reference_content": "Examples:\n\"SAVE ON YOUR NEXT STAY\"\n\"25% OFF* MIN. 3 NIGHT STAYS\"\n\"YOUR PERFECT STAY AT THE BEST PRICE\"\n"
+                },
+                "catchy_slogan4": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The slogan should be short, engaging, and related to the sale theme or the urgency of the offer. It should reinforce the benefits and create a sense of excitement.\nStructure: A simple, catchy line that mirrors the core message of the campaign, often repeated across images for consistency.\nTone: Lively, memorable, and motivating.",
+                    "reference_content": "Examples:\n\"Save up to 10%*\"\n\"QUICK! Summer is here\"\n\"Great spring breaks\""
+                },
+                "cta4": {
+                    "nb_characters": "40",
+                    "content_guidelines": "Guideline: The CTA should clearly instruct the user to take immediate action, such as booking directly on the platform. It should often emphasize exclusivity or urgency.\nStructure: A direct command such as \u201cBOOK NOW\u201d or \u201cSAVE WHEN YOU BOOK EARLY\u201d followed by a specific instruction like \"only on ALL.com.\"\nTone: Action-oriented, clear, and urgent.",
+                    "reference_content": "Examples:\n\"BOOK NOW\"\n\"Book only on ALL.com\"\n\"Save when you book early\""
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "title-copy_on_image1-catchy_slogan1-cta1-copy_on_image2-catchy_slogan2-cta2-copy_on_image3-catchy_slogan3-cta3-copy_on_blue_background-catchy_slogan4-cta4",
+                "nested_structure": ""
+            }
+        }
+    }
+}

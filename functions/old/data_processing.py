@@ -14,6 +14,7 @@ from operator import itemgetter
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 # from functions.chain import choose_model
+import streamlit as st
 
 
 # Global Variables 
@@ -25,7 +26,7 @@ from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTempla
 #     cw_guidelines = f.read()
 
 load_dotenv(find_dotenv())
-openai.api_key = os.environ['OPENAI_API_KEY']
+openai.api_key = st.secrets['OPENAI_API_KEY']
     
 # Correct and Consolidate
 # def correct_answers(df):

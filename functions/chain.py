@@ -9,10 +9,11 @@ from langchain_openai.chat_models import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_core.output_parsers import JsonOutputParser
+import streamlit as st
 
 
 load_dotenv(find_dotenv())
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # # PROMPT LOADING
 # PROMPT_FOLDER_PATH = os.path.join(os.getcwd(), 'prompts')

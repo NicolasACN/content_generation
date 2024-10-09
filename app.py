@@ -8,16 +8,14 @@ import os
 import shutil
 import json
 from flask import Flask, request, jsonify
+from models.objectModels import Project
+from models.requestModels import CreateProjectResponse
 
 app = Flask(__name__)
 
 # Function to create project directory structure
 def create_project_structure(project_name, project_brief):
-    result = {
-    "projectName": "",
-    "message": "",
-    "success": False
-    }
+    response = CreateProjectResponse()
     project_path = os.path.join(os.getcwd(), "projects", project_name)
     folders = [
         "data/brand_data",
@@ -45,26 +43,31 @@ def create_project_structure(project_name, project_brief):
     
     try:
         shutil.copytree(source_prompts_path, dest_prompts_path, dirs_exist_ok=True)
-        result["projectName"] = project_name
-        result["message"] = (f"Project '{project_name}' created successfully!")
-        result["success"] = True
+        response.projectName = project_name
+        response.message = (f"Project '{project_name}' created successfully!")
+        response.success = True
     except Exception as e:
-        result["message"] = (f"Error created project '{project_name}' : {e}")
+        response.message = (f"Error created project '{project_name}' : {e}")
     finally:
-        return result
+        return response
 
 # Function to create project directory structure
 def get_all_projects():
-    result = {
+    project = {
     "projectName": "",
-    "message": "",
-    "success": False
+    "projectBrief": "",
     }
-    project_dir = os.path.join(os.getcwd(), "projects")
-    #project_path = os.path.join(os.getcwd(), "projects", project_name)
+    projects_list = []
+    projects_dir = os.path.join(os.getcwd(), "projects")
 
     if os.path.exists(project_dir):
-        projects = [d for d in os.listdir(project_dir) if os.path.isdir(os.path.join(project_dir, d))]
+        projects = [d for d in os.listdir(projects_dir) if os.path.isdir(os.path.join(projects_dir, d))]
+        for project in projects:
+            project_info = ProjectInfo(
+                name=project.name,
+                brief=project.brief  
+            )
+            projects_list.append(project_info)
     return projects
 
 # Endpoint pour crée un projet
@@ -76,10 +79,11 @@ def create_project():
 
     # Vérifier si les données sont présentes
     if project_name is None or projectBrief is None:
-        return jsonify({"error": "Les champs 'nom' et 'age' sont obligatoires."}), 400
+        return jsonify({"error": "Les champs 'project_name' et 'projectBrief' sont obligatoires."}), 400
 
     result = create_project_structure(project_name, projectBrief)
-    return jsonify(result)
+    
+    return jsonify(result.__dict__)
 
 # Endpoint pour recuperer la liste des projets
 @app.route('/api/projects', methods=['GET'])

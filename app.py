@@ -53,22 +53,25 @@ def create_project_structure(project_name, project_brief):
 
 # Function to create project directory structure
 def get_all_projects():
-    project = {
-    "projectName": "",
-    "projectBrief": "",
-    }
+    project = Project()
     projects_list = []
     projects_dir = os.path.join(os.getcwd(), "projects")
 
-    if os.path.exists(project_dir):
+    if os.path.exists(projects_dir):
         projects = [d for d in os.listdir(projects_dir) if os.path.isdir(os.path.join(projects_dir, d))]
-        for project in projects:
-            project_info = ProjectInfo(
-                name=project.name,
-                brief=project.brief  
-            )
-            projects_list.append(project_info)
-    return projects
+        for projectName in projects:
+            brief_path = os.path.join(os.getcwd(), "projects", projectName, "data", "content", "brief", "brief.txt")
+            # verification de l'existance du fichier
+            if os.path.exists(brief_path):
+                # lecture et extraction du contenu du fichier
+                with open(brief_path, "r", encoding='utf-8') as f:
+                    content = f.read()
+                 
+                project.name = projectName
+                project.brief = content
+                projects_list.append(project)
+    
+    return projects_list
 
 # Endpoint pour crée un projet
 @app.route('/api/project', methods=['POST'])
@@ -89,7 +92,10 @@ def create_project():
 @app.route('/api/projects', methods=['GET'])
 def get_projects():
     result = get_all_projects()
-    return jsonify(result)
+    
+    # Convertir chaque objet Project en dictionnaire pour pouvoir serialisé en json
+    projects_dict = [project.to_dict() for project in result]
+    return jsonify(projects_dict)
 
 # Endpoint pour recuperer les détails du projet
 @app.route('/api/project/<string:projectId>', methods=['GET'])

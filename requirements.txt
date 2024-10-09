@@ -90,3 +90,5 @@ openai
 langchain
 langchain_openai
 openpyxl
+streamlit
+flask

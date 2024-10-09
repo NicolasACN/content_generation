@@ -91,11 +91,85 @@ def get_projects():
     result = get_all_projects()
     return jsonify(result)
 
+
+# Placeholder for the load_project_details function
+def load_project_details(project_name: str):
+    try:
+        project_path = os.path.join(os.getcwd(), "projects", project_name)
+        if not os.path.exists(project_path):
+            raise RuntimeError(f"Failed to load project details: {project_name} n'existe pas")
+        project_info_path = os.path.join(project_path, "data", "project_info")
+
+        with open(os.path.join(project_info_path, "project_brief.txt"), "r") as f:
+            project_brief = f.read()
+        
+        # Load brand knowledge, copywriting guidelines, reference examples, and role
+        brand_knowledge=load_brand_knowledge(project_name)
+        copywriting_guidelines=load_copywriting_guidelines(project_name)
+        reference_examples=load_reference_examples(project_name)
+        role=load_role(project_name)
+        
+        # Load brief
+        brief_path = os.path.join(project_path, "data", "content", "brief", "brief.txt")
+        if os.path.exists(brief_path):
+            with open(brief_path, "r") as f:
+                brief = f.read()
+    
+        # Simulated logic for loading project details, replace with actual logic
+        # For example, load data from a database or file based on the project name
+        return {
+            "project_name": project_name,
+            "project_brief": project_brief,
+            "brief": brief,
+            "role" : role,
+            "brand_knowledge" : brand_knowledge,
+            "copywriting_guidelines" : copywriting_guidelines,
+            "brand_knowledge" : brand_knowledge
+        }
+    except Exception as e:
+        raise RuntimeError(f"Failed to load project details: {str(e)}")
+
 # Endpoint pour recuperer les détails du projet
-@app.route('/api/project/<string:projectId>', methods=['GET'])
-def get_project_detail():
-    result = load_project_details(projectId)
-    return jsonify(result)
+@app.route('/api/project', methods=['GET'])
+def get_project_details():
+    project_name = request.args.get('project_name')
+    if not project_name:
+        return jsonify({"error": "Project name is required"}), 400
+    try:
+        # Call the load_project_details function and get the details
+        project_details = load_project_details(project_name)
+        return jsonify({"message": "Project details loaded successfully", "data": project_details}), 200
+    except RuntimeError as e:
+        # Return an HTTP 400 error with the exception message
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        # Return a general HTTP 500 error for any unexpected issues
+        return jsonify({"error": "An unexpected error occurred"}), 500
+
+# Functions to load brand knowledge, copywriting guidelines, and reference examples
+def load_brand_knowledge(project_name):
+    brand_knowledge_path = os.path.join(os.getcwd(), "projects", project_name, "data", "brand_data", "brand_knowledge.txt")
+    if os.path.exists(brand_knowledge_path):
+        with open(brand_knowledge_path, "r") as f:
+            return f.read()
+
+def load_role(project_name):
+    role_path = os.path.join(os.getcwd(), "projects", project_name, "data", "role", "role.txt")
+    if os.path.exists(role_path):
+        with open(role_path, "r") as f:
+            return f.read()
+        
+def load_copywriting_guidelines(project_name):
+    copywriting_guidelines_path = os.path.join(os.getcwd(), "projects", project_name, "data", "copywriting", "copywriting_guidelines.txt")
+    if os.path.exists(copywriting_guidelines_path):
+        with open(copywriting_guidelines_path, "r") as f:
+            return f.read()
+        
+def load_reference_examples(project_name):
+    reference_examples_path = os.path.join(os.getcwd(), "projects", project_name, "data", "reference_examples", "reference_examples.txt")
+    if os.path.exists(reference_examples_path):
+        with open(reference_examples_path, "r") as f:
+            return f.read()
 
 # # Endpoint pour upload un fichier brand knowledge
 # @app.route('/api/project/<string:projectId>/brand-knowledge', methods=['POST'])

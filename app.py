@@ -136,14 +136,13 @@ def load_project_details(project_name: str):
         raise RuntimeError(f"Failed to load project details: {str(e)}")
 
 # Endpoint pour recuperer les détails du projet
-@app.route('/api/project', methods=['GET'])
-def get_project_details():
-    project_name = request.args.get('project_name')
-    if not project_name:
+@app.route('/api/project/<project_id>', methods=['GET'])
+def get_project_details(project_id):
+    if not project_id:
         return jsonify({"error": "Project name is required"}), 400
     try:
         # Call the load_project_details function and get the details
-        project_details = load_project_details(project_name)
+        project_details = load_project_details(project_id)
         return jsonify({"message": "Project details loaded successfully", "data": project_details}), 200
     except RuntimeError as e:
         # Return an HTTP 400 error with the exception message
@@ -201,5 +200,185 @@ def load_reference_examples(project_name):
 #     result = load_project_details(projectId)
 #     return jsonify(result)
 
+# Function to create a new template
+def create_template(project_id, template_name):
+    # Define the path for the templates based on the project ID
+    templates_path = os.path.join(os.getcwd(), "projects", project_id, "content")
+    
+    # Create the directory if it does not exist
+    if not os.path.exists(templates_path):
+        os.makedirs(templates_path, exist_ok=True)
+    
+
+    new_template_path = os.path.join(templates_path, template_name)
+    
+    # Create the template directory and empty JSON files
+    os.makedirs(os.path.join(new_template_path, 'content_data'), exist_ok=True)
+    with open(os.path.join(new_template_path, 'content_data', 'content_structure.json'), 'w') as f:
+        json.dump({}, f)
+    with open(os.path.join(new_template_path, 'content_data', 'data_dict.json'), 'w') as f:
+        json.dump({}, f)
+    with open(os.path.join(new_template_path, 'content_data', 'filled_data.json'), 'w') as f:
+        json.dump({}, f)
+
+
+# API endpoint to create a new template
+@app.route('/api/projects/<project_id>/templates', methods=['POST'])
+def create_new_template(project_id):
+    # Get the request data
+    data = request.get_json()
+    template_name = data.get('templateName')
+    
+    if not template_name:
+        return jsonify({"error": "Template name is required"}), 400
+    
+    try:
+        # Call the create_template function
+        create_template(project_id, template_name)
+        response = {
+            "templateId": template_name,
+            "message": "Template created successfully."
+        }
+        return jsonify(response), 201
+    except Exception as e:
+        return jsonify({"error": f"Failed to create template: {str(e)}"}), 500
+
+
+# Function to get all templates for a given project
+def get_templates(project_id):
+    # Define the path for the templates based on the project ID
+    templates_path = os.path.join(os.getcwd(), "projects", project_id, "content")
+    
+    # Check if the directory exists
+    if not os.path.exists(templates_path):
+        return []
+
+    # List all directories (templates) in the content path
+    templates = []
+    for template_name in os.listdir(templates_path):
+        template_path = os.path.join(templates_path, template_name)
+        if os.path.isdir(template_path):
+            # Create a template entry
+            templates.append({
+                "templateName": template_name
+            })
+
+    return templates
+
+# API endpoint to get templates for a project
+@app.route('/api/projects/<project_id>/templates', methods=['GET'])
+def get_project_templates(project_id):
+    try:
+        # Call the get_templates function
+        templates = get_templates(project_id)
+        return jsonify(templates), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve templates: {str(e)}"}), 500
+
+
+# Function to get template details for a given project and template ID
+def get_template_details(project_id, template_id):
+    # Define the path for the template based on the project ID and template ID
+    template_path = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data")
+    
+    # Check if the directory exists
+    if not os.path.exists(template_path):
+        raise FileNotFoundError(f"Template '{template_id}' not found for project '{project_id}'")
+    
+    # Load content structure
+    content_structure = {}
+    content_structure_file = os.path.join(template_path, 'content_structure.json')
+    if os.path.exists(content_structure_file):
+        with open(content_structure_file, 'r') as f:
+            content_structure = json.load(f)
+    
+    # Load data
+    data = {}
+    data_file = os.path.join(template_path, 'data_dict.json')
+    if os.path.exists(data_file):
+        with open(data_file, 'r') as f:
+            data = json.load(f)
+
+    # Return the template details
+    return {
+        "templateName": template_id,
+        "contentStructure": content_structure,
+        "data": data
+    }
+
+# API endpoint to get template details for a project
+@app.route('/api/projects/<project_id>/templates/<template_id>', methods=['GET'])
+def get_template_details_api(project_id, template_id):
+    try:
+        # Call the get_template_details function
+        template_details = get_template_details(project_id, template_id)
+        return jsonify(template_details), 200
+    except FileNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve template details: {str(e)}"}), 500
+
+# Function to save content structure for a given project and template ID
+def save_content_structure(project_id, template_id, content_structure):
+    # Define the path for the content structure file based on the project ID and template ID
+    content_data_path = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data")
+    
+    # Create the directory if it does not exist
+    os.makedirs(content_data_path, exist_ok=True)
+    
+    # Save the content structure to a JSON file
+    content_structure_file = os.path.join(content_data_path, 'content_structure.json')
+    with open(content_structure_file, 'w') as f:
+        json.dump(content_structure, f, indent=4)
+
+# API endpoint to save content structure for a template
+@app.route('/api/projects/<project_id>/templates/<template_id>/structure', methods=['POST'])
+def save_content_structure_api(project_id, template_id):
+    try:
+        # Get the request data
+        data = request.get_json()
+        content_structure = data.get('contentStructure')
+        
+        if content_structure is None:
+            return jsonify({"error": "Content structure is required"}), 400
+        
+        # Call the save_content_structure function
+        save_content_structure(project_id, template_id, content_structure)
+        
+        # Return a success response
+        return jsonify({"message": "Content structure saved successfully."}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to save content structure: {str(e)}"}), 500
+
+
+# Function to get content structure for a given project and template ID
+def get_content_structure(project_id, template_id):
+    # Define the path for the content structure file based on the project ID and template ID
+    content_structure_file = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data", "content_structure.json")
+    
+    # Check if the file exists
+    if not os.path.exists(content_structure_file):
+        raise FileNotFoundError(f"Content structure not found for template '{template_id}' in project '{project_id}'")
+    
+    # Load the content structure from the JSON file
+    with open(content_structure_file, 'r') as f:
+        content_structure = json.load(f)
+
+    # Return the content structure
+    return content_structure
+
+# API endpoint to get content structure for a template
+@app.route('/api/projects/<project_id>/templates/<template_id>/structure', methods=['GET'])
+def get_content_structure_api(project_id, template_id):
+    try:
+        # Call the get_content_structure function
+        content_structure = get_content_structure(project_id, template_id)
+        return jsonify({"contentStructure": content_structure}), 200
+    except FileNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve content structure: {str(e)}"}), 500
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080,debug=True)

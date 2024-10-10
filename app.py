@@ -379,6 +379,66 @@ def get_content_structure_api(project_id, template_id):
     except Exception as e:
         return jsonify({"error": f"Failed to retrieve content structure: {str(e)}"}), 500
 
+# Function to save data for a given project and template ID
+def save_data(project_id, template_id, data):
+    # Define the path for the data file based on the project ID and template ID
+    content_data_path = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data")
+    
+    # Create the directory if it does not exist
+    os.makedirs(content_data_path, exist_ok=True)
+    
+    # Save the data to a JSON file
+    data_file = os.path.join(content_data_path, 'data_dict.json')
+    with open(data_file, 'w') as f:
+        json.dump(data, f, indent=4)
+
+# API endpoint to save data for a template
+@app.route('/api/projects/<project_id>/templates/<template_id>/data', methods=['POST'])
+def save_data_api(project_id, template_id):
+    try:
+        # Get the request data
+        data = request.get_json()
+        data_object = data.get('data')
+        
+        if data_object is None:
+            return jsonify({"error": "Data object is required"}), 400
+        
+        # Call the save_data function
+        save_data(project_id, template_id, data_object)
+        
+        # Return a success response
+        return jsonify({"message": "Data saved successfully."}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to save data: {str(e)}"}), 500
+
+
+# Function to get data for a given project and template ID
+def get_data(project_id, template_id):
+    # Define the path for the data file based on the project ID and template ID
+    data_file = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data", "data_dict.json")
+    
+    # Check if the file exists
+    if not os.path.exists(data_file):
+        raise FileNotFoundError(f"Data not found for template '{template_id}' in project '{project_id}'")
+    
+    # Load the data from the JSON file
+    with open(data_file, 'r') as f:
+        data = json.load(f)
+
+    # Return the data
+    return data
+
+# API endpoint to get data for a template
+@app.route('/api/projects/<project_id>/templates/<template_id>/data', methods=['GET'])
+def get_data_api(project_id, template_id):
+    try:
+        # Call the get_data function
+        data = get_data(project_id, template_id)
+        return jsonify({"data": data}), 200
+    except FileNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve data: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080,debug=True)

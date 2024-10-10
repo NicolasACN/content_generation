@@ -10,8 +10,15 @@ import json
 from flask import Flask, request, jsonify
 from models.objectModels import Project
 from models.requestModels import CreateProjectResponse
+from functions.utils import extract_brand_knowledge, extract_copywriting_guidelines
 
 app = Flask(__name__)
+
+#####################################
+#                                   #
+#             Fonctions             #
+#                                   #
+#####################################
 
 # Function to create project directory structure
 def create_project_structure(project_name, project_brief):
@@ -53,7 +60,6 @@ def create_project_structure(project_name, project_brief):
 
 # Function to create project directory structure
 def get_all_projects():
-    project = Project()
     projects_list = []
     projects_dir = os.path.join(os.getcwd(), "projects")
 
@@ -66,39 +72,15 @@ def get_all_projects():
                 # lecture et extraction du contenu du fichier
                 with open(brief_path, "r", encoding='utf-8') as f:
                     content = f.read()
-                 
+
+                project = Project() 
                 project.name = projectName
                 project.brief = content
                 projects_list.append(project)
     
     return projects_list
 
-# Endpoint pour crée un projet
-@app.route('/api/project', methods=['POST'])
-def create_project():
-    # Récupérer les données du formulaire
-    project_name = request.form.get('project_name')
-    projectBrief = request.form.get('projectBrief')
-
-    # Vérifier si les données sont présentes
-    if project_name is None or projectBrief is None:
-        return jsonify({"error": "Les champs 'project_name' et 'projectBrief' sont obligatoires."}), 400
-
-    result = create_project_structure(project_name, projectBrief)
-    
-    return jsonify(result.__dict__)
-
-# Endpoint pour recuperer la liste des projets
-@app.route('/api/projects', methods=['GET'])
-def get_projects():
-    result = get_all_projects()
-    
-    # Convertir chaque objet Project en dictionnaire pour pouvoir serialisé en json
-    projects_dict = [project.to_dict() for project in result]
-    return jsonify(projects_dict)
-
-
-# Placeholder for the load_project_details function
+# Function for load project details
 def load_project_details(project_name: str):
     try:
         project_path = os.path.join(os.getcwd(), "projects", project_name)
@@ -110,10 +92,10 @@ def load_project_details(project_name: str):
             project_brief = f.read()
         
         # Load brand knowledge, copywriting guidelines, reference examples, and role
-        brand_knowledge=load_brand_knowledge(project_name)
-        copywriting_guidelines=load_copywriting_guidelines(project_name)
-        reference_examples=load_reference_examples(project_name)
-        role=load_role(project_name)
+        brand_knowledge=load_data_file(project_name, "brand_data", "brand_knowledge")
+        copywriting_guidelines=load_data_file(project_name, "copywriting", "copywriting_guidelines")
+        reference_examples=load_data_file(project_name, "reference_examples", "reference_examples")
+        role=load_data_file(project_name, "role", "role")
         
         # Load brief
         brief_path = os.path.join(project_path, "data", "content", "brief", "brief.txt")
@@ -135,70 +117,19 @@ def load_project_details(project_name: str):
     except Exception as e:
         raise RuntimeError(f"Failed to load project details: {str(e)}")
 
-# Endpoint pour recuperer les détails du projet
-@app.route('/api/project/<project_id>', methods=['GET'])
-def get_project_details(project_id):
-    if not project_id:
-        return jsonify({"error": "Project name is required"}), 400
-    try:
-        # Call the load_project_details function and get the details
-        project_details = load_project_details(project_id)
-        return jsonify({"message": "Project details loaded successfully", "data": project_details}), 200
-    except RuntimeError as e:
-        # Return an HTTP 400 error with the exception message
-        return jsonify({"error": str(e)}), 400
-    except Exception as e:
-        # Return a general HTTP 500 error for any unexpected issues
-        return jsonify({"error": "An unexpected error occurred"}), 500
-
-# Functions to load brand knowledge, copywriting guidelines, and reference examples
-def load_brand_knowledge(project_name):
-    brand_knowledge_path = os.path.join(os.getcwd(), "projects", project_name, "data", "brand_data", "brand_knowledge.txt")
-    if os.path.exists(brand_knowledge_path):
-        with open(brand_knowledge_path, "r") as f:
+# Functions to load data files like brand knowledge, copywriting guidelines, reference examples and role
+def load_data_file(project_name, folderName, fileName):
+    path = os.path.join(os.getcwd(), "projects", project_name, "data", folderName, f"{fileName}.txt")
+    if os.path.exists(path):
+        with open(path, "r") as f:
             return f.read()
 
-def load_role(project_name):
-    role_path = os.path.join(os.getcwd(), "projects", project_name, "data", "role", "role.txt")
-    if os.path.exists(role_path):
-        with open(role_path, "r") as f:
-            return f.read()
-        
-def load_copywriting_guidelines(project_name):
-    copywriting_guidelines_path = os.path.join(os.getcwd(), "projects", project_name, "data", "copywriting", "copywriting_guidelines.txt")
-    if os.path.exists(copywriting_guidelines_path):
-        with open(copywriting_guidelines_path, "r") as f:
-            return f.read()
-        
-def load_reference_examples(project_name):
-    reference_examples_path = os.path.join(os.getcwd(), "projects", project_name, "data", "reference_examples", "reference_examples.txt")
-    if os.path.exists(reference_examples_path):
-        with open(reference_examples_path, "r") as f:
-            return f.read()
-
-# # Endpoint pour upload un fichier brand knowledge
-# @app.route('/api/project/<string:projectId>/brand-knowledge', methods=['POST'])
-# def get_project_detail():
-#     result = load_project_details(projectId)
-#     return jsonify(result)
-
-# # Endpoint pour upload un fichier copywriting guidelines
-# @app.route('/api/project/<string:projectId>/copywriting-guidelines', methods=['POST'])
-# def get_project_detail():
-#     result = load_project_details(projectId)
-#     return jsonify(result)
-
-# # Endpoint pour upload un fichier reference examples
-# @app.route('/api/project/<string:projectId>/reference-examples', methods=['POST'])
-# def get_project_detail():
-#     result = load_project_details(projectId)
-#     return jsonify(result)
-
-# # Endpoint pour save les Copywriting Role
-# @app.route('/api/project/<string:projectId>/role', methods=['POST'])
-# def get_project_detail():
-#     result = load_project_details(projectId)
-#     return jsonify(result)
+# Functions to write content in data files like brand knowledge, copywriting guidelines, reference examples and role
+def update_data_file(content, project_name, folderName, fileName):
+    path = os.path.join(os.getcwd(), "projects", project_name, "data", folderName, f"{fileName}.txt")
+    if os.path.exists(path):
+        with open(path, "w") as f:
+            f.write(content)
 
 # Function to create a new template
 def create_template(project_id, template_name):
@@ -221,29 +152,6 @@ def create_template(project_id, template_name):
     with open(os.path.join(new_template_path, 'content_data', 'filled_data.json'), 'w') as f:
         json.dump({}, f)
 
-
-# API endpoint to create a new template
-@app.route('/api/projects/<project_id>/templates', methods=['POST'])
-def create_new_template(project_id):
-    # Get the request data
-    data = request.get_json()
-    template_name = data.get('templateName')
-    
-    if not template_name:
-        return jsonify({"error": "Template name is required"}), 400
-    
-    try:
-        # Call the create_template function
-        create_template(project_id, template_name)
-        response = {
-            "templateId": template_name,
-            "message": "Template created successfully."
-        }
-        return jsonify(response), 201
-    except Exception as e:
-        return jsonify({"error": f"Failed to create template: {str(e)}"}), 500
-
-
 # Function to get all templates for a given project
 def get_templates(project_id):
     # Define the path for the templates based on the project ID
@@ -264,17 +172,6 @@ def get_templates(project_id):
             })
 
     return templates
-
-# API endpoint to get templates for a project
-@app.route('/api/projects/<project_id>/templates', methods=['GET'])
-def get_project_templates(project_id):
-    try:
-        # Call the get_templates function
-        templates = get_templates(project_id)
-        return jsonify(templates), 200
-    except Exception as e:
-        return jsonify({"error": f"Failed to retrieve templates: {str(e)}"}), 500
-
 
 # Function to get template details for a given project and template ID
 def get_template_details(project_id, template_id):
@@ -306,18 +203,6 @@ def get_template_details(project_id, template_id):
         "data": data
     }
 
-# API endpoint to get template details for a project
-@app.route('/api/projects/<project_id>/templates/<template_id>', methods=['GET'])
-def get_template_details_api(project_id, template_id):
-    try:
-        # Call the get_template_details function
-        template_details = get_template_details(project_id, template_id)
-        return jsonify(template_details), 200
-    except FileNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
-    except Exception as e:
-        return jsonify({"error": f"Failed to retrieve template details: {str(e)}"}), 500
-
 # Function to save content structure for a given project and template ID
 def save_content_structure(project_id, template_id, content_structure):
     # Define the path for the content structure file based on the project ID and template ID
@@ -330,6 +215,222 @@ def save_content_structure(project_id, template_id, content_structure):
     content_structure_file = os.path.join(content_data_path, 'content_structure.json')
     with open(content_structure_file, 'w') as f:
         json.dump(content_structure, f, indent=4)
+
+# Function to get content structure for a given project and template ID
+def get_content_structure(project_id, template_id):
+    # Define the path for the content structure file based on the project ID and template ID
+    content_structure_file = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data", "content_structure.json")
+    
+    # Check if the file exists
+    if not os.path.exists(content_structure_file):
+        raise FileNotFoundError(f"Content structure not found for template '{template_id}' in project '{project_id}'")
+    
+    # Load the content structure from the JSON file
+    with open(content_structure_file, 'r') as f:
+        content_structure = json.load(f)
+
+    # Return the content structure
+    return content_structure
+
+# Function to save data for a given project and template ID
+def save_data(project_id, template_id, data):
+    # Define the path for the data file based on the project ID and template ID
+    content_data_path = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data")
+    
+    # Create the directory if it does not exist
+    os.makedirs(content_data_path, exist_ok=True)
+    
+    # Save the data to a JSON file
+    data_file = os.path.join(content_data_path, 'data_dict.json')
+    with open(data_file, 'w') as f:
+        json.dump(data, f, indent=4)
+
+# Function to get data for a given project and template ID
+def get_data(project_id, template_id):
+    # Define the path for the data file based on the project ID and template ID
+    data_file = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data", "data_dict.json")
+    
+    # Check if the file exists
+    if not os.path.exists(data_file):
+        raise FileNotFoundError(f"Data not found for template '{template_id}' in project '{project_id}'")
+    
+    # Load the data from the JSON file
+    with open(data_file, 'r') as f:
+        data = json.load(f)
+
+    # Return the data
+    return data
+
+
+#####################################
+#                                   #
+#             Endpoints             #
+#                                   #
+#####################################
+
+# Endpoint pour crée un projet
+@app.route('/api/project', methods=['POST'])
+def create_project():
+    # Récupérer les données du formulaire
+    project_name = request.form.get('project_name')
+    projectBrief = request.form.get('projectBrief')
+
+    # Vérifier si les données sont présentes
+    if project_name is None or projectBrief is None:
+        return jsonify({"error": "Les champs 'project_name' et 'projectBrief' sont obligatoires."}), 400
+
+    result = create_project_structure(project_name, projectBrief)
+    
+    return jsonify(result.__dict__)
+
+# Endpoint pour recuperer la liste des projets
+@app.route('/api/projects', methods=['GET'])
+def get_projects():
+    result = get_all_projects()
+    
+    # Convertir chaque objet Project en dictionnaire pour pouvoir serialisé en json
+    projects_dict = [project.to_dict() for project in result]
+    return jsonify(projects_dict)
+
+# Endpoint pour recuperer les détails du projet
+@app.route('/api/project/<project_id>', methods=['GET'])
+def get_project_details(project_id):
+    if not project_id:
+        return jsonify({"error": "Project name is required"}), 400
+    try:
+        # Call the load_project_details function and get the details
+        project_details = load_project_details(project_id)
+        return jsonify({"message": "Project details loaded successfully", "data": project_details}), 200
+    except RuntimeError as e:
+        # Return an HTTP 400 error with the exception message
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        # Return a general HTTP 500 error for any unexpected issues
+        return jsonify({"error": "An unexpected error occurred"}), 500
+
+# Endpoint pour upload un fichier brand knowledge
+@app.route('/api/project/<projectName>/brand-knowledge', methods=['POST'])
+def load_brand_knowledge(projectName):
+    # Vérifie si un fichier a été envoyé
+    if 'files' not in request.files:
+        return jsonify({"erreur": "pas de fichier dans la requête"}), 400
+    
+    files = request.files.getlist('files')
+
+    # Vérifie si des fichiers ont été sélectionnés
+    if len(files) == 0:
+        return jsonify({"erreur": "aucun fichier selectionnés"}), 400
+    
+    try: 
+        concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in files]) # Boucle sur chaque fichier
+        digested_content = extract_brand_knowledge(concatenated_docs)
+        update_data_file(digested_content, projectName, "brand_data", "brand_knowledge")
+    except Exception as e:
+        return jsonify({"error": f"Failed to update brand knowledge: {str(e)}"}), 500
+    
+    return jsonify({"message": f"Brand knowledge uploaded successfully."}), 200
+
+# Endpoint pour upload un fichier copywriting guidelines
+@app.route('/api/project/<projectName>/copywriting-guidelines', methods=['POST'])
+def load_copywriting_guidelines(projectName):
+    # Vérifie si un fichier a été envoyé
+    if 'files' not in request.files:
+        return jsonify({"erreur": "pas de fichier dans la requête"}), 400
+    
+    files = request.files.getlist('files')
+
+    # Vérifie si des fichiers ont été sélectionnés
+    if len(files) == 0:
+        return jsonify({"erreur": "aucun fichier selectionnés"}), 400
+    
+    try: 
+        concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in files]) # Boucle sur chaque fichier
+        digested_content = extract_copywriting_guidelines(concatenated_docs)
+        update_data_file(digested_content, projectName, "copywriting", "copywriting_guidelines")
+    except Exception as e:
+        return jsonify({"error": f"Failed to update copywriting guidelines: {str(e)}"}), 500
+
+    return jsonify({"message": f"Copywriting guidelines uploaded successfully."}), 200
+
+# Endpoint pour upload un fichier reference examples
+@app.route('/api/project/<projectName>/reference-examples', methods=['POST'])
+def load_reference_examples(projectName):
+    # Vérifie si un fichier a été envoyé
+    if 'files' not in request.files:
+        return jsonify({"erreur": "pas de fichier dans la requête"}), 400
+    
+    files = request.files.getlist('files')
+
+    # Vérifie si des fichiers ont été sélectionnés
+    if len(files) == 0:
+        return jsonify({"erreur": "aucun fichier selectionnés"}), 400
+    
+    try: 
+        concatenated_docs = "\n\n---\n\nEXAMPLE:\n".join([file.read().decode("utf-8") for file in files]) # Boucle sur chaque fichier
+        digested_content = "EXAMPLE:\n" + concatenated_docs
+        update_data_file(digested_content, projectName, "reference_examples", "reference_examples")
+    except Exception as e:
+        return jsonify({"error": f"Failed to update reference examples: {str(e)}"}), 500
+
+    return jsonify({"message": f"Reference examples uploaded successfully."}), 200
+
+# Endpoint pour save les Copywriting Role
+@app.route('/api/project/<projectName>/role', methods=['POST'])
+def load_copywriting_role(projectName):
+    role = request.form.get('role')
+    # Vérifie si un fichier a été envoyé
+    if not role:
+        return jsonify({"erreur": "paramétre 'role' obligatoire"}), 400
+    
+    try: 
+        update_data_file(role, projectName, "role", "role")
+    except Exception as e:
+        return jsonify({"error": f"Failed to update reference examples: {str(e)}"}), 500
+
+    return jsonify({"message": f"Copywriting role saved successfully."}), 200
+
+# API endpoint to create a new template
+@app.route('/api/projects/<project_id>/templates', methods=['POST'])
+def create_new_template(project_id):
+    # Get the request data
+    data = request.get_json()
+    template_name = data.get('templateName')
+    
+    if not template_name:
+        return jsonify({"error": "Template name is required"}), 400
+    
+    try:
+        # Call the create_template function
+        create_template(project_id, template_name)
+        response = {
+            "templateId": template_name,
+            "message": "Template created successfully."
+        }
+        return jsonify(response), 201
+    except Exception as e:
+        return jsonify({"error": f"Failed to create template: {str(e)}"}), 500
+
+# API endpoint to get templates for a project
+@app.route('/api/projects/<project_id>/templates', methods=['GET'])
+def get_project_templates(project_id):
+    try:
+        # Call the get_templates function
+        templates = get_templates(project_id)
+        return jsonify(templates), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve templates: {str(e)}"}), 500
+
+# API endpoint to get template details for a project
+@app.route('/api/projects/<project_id>/templates/<template_id>', methods=['GET'])
+def get_template_details_api(project_id, template_id):
+    try:
+        # Call the get_template_details function
+        template_details = get_template_details(project_id, template_id)
+        return jsonify(template_details), 200
+    except FileNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve template details: {str(e)}"}), 500
 
 # API endpoint to save content structure for a template
 @app.route('/api/projects/<project_id>/templates/<template_id>/structure', methods=['POST'])
@@ -350,23 +451,6 @@ def save_content_structure_api(project_id, template_id):
     except Exception as e:
         return jsonify({"error": f"Failed to save content structure: {str(e)}"}), 500
 
-
-# Function to get content structure for a given project and template ID
-def get_content_structure(project_id, template_id):
-    # Define the path for the content structure file based on the project ID and template ID
-    content_structure_file = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data", "content_structure.json")
-    
-    # Check if the file exists
-    if not os.path.exists(content_structure_file):
-        raise FileNotFoundError(f"Content structure not found for template '{template_id}' in project '{project_id}'")
-    
-    # Load the content structure from the JSON file
-    with open(content_structure_file, 'r') as f:
-        content_structure = json.load(f)
-
-    # Return the content structure
-    return content_structure
-
 # API endpoint to get content structure for a template
 @app.route('/api/projects/<project_id>/templates/<template_id>/structure', methods=['GET'])
 def get_content_structure_api(project_id, template_id):
@@ -378,19 +462,6 @@ def get_content_structure_api(project_id, template_id):
         return jsonify({"error": str(e)}), 404
     except Exception as e:
         return jsonify({"error": f"Failed to retrieve content structure: {str(e)}"}), 500
-
-# Function to save data for a given project and template ID
-def save_data(project_id, template_id, data):
-    # Define the path for the data file based on the project ID and template ID
-    content_data_path = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data")
-    
-    # Create the directory if it does not exist
-    os.makedirs(content_data_path, exist_ok=True)
-    
-    # Save the data to a JSON file
-    data_file = os.path.join(content_data_path, 'data_dict.json')
-    with open(data_file, 'w') as f:
-        json.dump(data, f, indent=4)
 
 # API endpoint to save data for a template
 @app.route('/api/projects/<project_id>/templates/<template_id>/data', methods=['POST'])
@@ -410,23 +481,6 @@ def save_data_api(project_id, template_id):
         return jsonify({"message": "Data saved successfully."}), 200
     except Exception as e:
         return jsonify({"error": f"Failed to save data: {str(e)}"}), 500
-
-
-# Function to get data for a given project and template ID
-def get_data(project_id, template_id):
-    # Define the path for the data file based on the project ID and template ID
-    data_file = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "content_data", "data_dict.json")
-    
-    # Check if the file exists
-    if not os.path.exists(data_file):
-        raise FileNotFoundError(f"Data not found for template '{template_id}' in project '{project_id}'")
-    
-    # Load the data from the JSON file
-    with open(data_file, 'r') as f:
-        data = json.load(f)
-
-    # Return the data
-    return data
 
 # API endpoint to get data for a template
 @app.route('/api/projects/<project_id>/templates/<template_id>/data', methods=['GET'])

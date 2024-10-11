@@ -98,6 +98,7 @@ def load_project_details(project_name: str):
         role=load_data_file(project_name, "role", "role")
         
         # Load brief
+        brief = ""
         brief_path = os.path.join(project_path, "data", "content", "brief", "brief.txt")
         if os.path.exists(brief_path):
             with open(brief_path, "r") as f:

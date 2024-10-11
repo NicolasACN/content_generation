@@ -128,9 +128,9 @@ def load_data_file(project_name, folderName, fileName):
 # Functions to write content in data files like brand knowledge, copywriting guidelines, reference examples and role
 def update_data_file(content, project_name, folderName, fileName):
     path = os.path.join(os.getcwd(), "projects", project_name, "data", folderName, f"{fileName}.txt")
-    if os.path.exists(path):
-        with open(path, "w") as f:
-            f.write(content)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as f:
+        f.write(content)
 
 # Function to create a new template
 def create_template(project_id, template_name):
@@ -378,7 +378,9 @@ def load_reference_examples(projectName):
 # Endpoint pour save les Copywriting Role
 @app.route('/api/project/<projectName>/role', methods=['POST'])
 def load_copywriting_role(projectName):
-    role = request.form.get('role')
+    data = request.get_json()
+    role = data.get('role')
+    
     # Vérifie si un fichier a été envoyé
     if not role:
         return jsonify({"erreur": "paramétre 'role' obligatoire"}), 400

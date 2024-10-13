@@ -1,0 +1,120 @@
+{
+    "PDP": {
+        "french_pdp": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "100 chars",
+                    "content_guidelines": "The name of the product (Beefeater 0.0)",
+                    "reference_content": "Beefeater 0.0"
+                },
+                "french_description": {
+                    "nb_characters": "600 chars",
+                    "content_guidelines": "The french description of the product to be displayed as main text on the new product detail page. It could add a french cultural touch to be appealing to french readers.",
+                    "reference_content": "Voici Beefeater 0.0, votre nouvelle boisson de pr\u00e9dilection : 0 % d\u2019alcool, 100 % de plaisir.\n\nNous avons revisit\u00e9 le c\u00e9l\u00e8bre Beefeater London Dry Gin, multi-r\u00e9compens\u00e9, pour cr\u00e9er une version sans alcool qui ne sacrifie rien au go\u00fbt : un concentr\u00e9 de saveurs.\n\nFid\u00e8le \u00e0 l\u2019ADN de Beefeater, Beefeater 0.0 offre une palette aromatique domin\u00e9e par le geni\u00e8vre, avec nos notes d\u2019agrumes embl\u00e9matiques, orange et citron, pour une personnalit\u00e9 vive et audacieuse dans chaque verre.\n\nPour tous ces moments o\u00f9 vous voulez profiter \u00e0 fond, avec des saveurs naturelles, sans alcool.\n\nUn v\u00e9ritable hommage \u00e0 Londres, fruit de l\u2019expertise de plusieurs g\u00e9n\u00e9rations de ma\u00eetres distillateurs Beefeater, avec toute l\u2019attitude et l\u2019esprit d\u2019un gin londonien. \u00c0 votre sant\u00e9 !"
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "title-french_description",
+                "nested_structure": ""
+            }
+        },
+        "spanish_pdp": {
+            "bloc_guidelines": {
+                "title": {
+                    "nb_characters": "100 chars",
+                    "content_guidelines": "The name of the product",
+                    "reference_content": "Beefeater 0.0"
+                },
+                "spanish_description": {
+                    "nb_characters": "600 chars",
+                    "content_guidelines": "The spanish description of the product to be used as main text on the spanish product detailed page of the new Beefeater 0.0. You could add spanish cultural elements to be appealing to spanish readers. ",
+                    "reference_content": "Aqu\u00ed tienes Beefeater 0.0, tu nueva bebida preferida: 0 % de alcohol, 100 % de diversi\u00f3n.\n\nHemos reinventado el ic\u00f3nico Beefeater London Dry Gin, galardonado en numerosas ocasiones, para crear una versi\u00f3n sin alcohol que no renuncia al sabor: una aut\u00e9ntica explosi\u00f3n de matices.\n\nFiel al alma de Beefeater, Beefeater 0.0 presenta un perfil arom\u00e1tico protagonizado por el enebro, con nuestras caracter\u00edsticas notas c\u00edtricas de naranja y lim\u00f3n, aportando una personalidad vibrante y audaz a cada trago.\n\nPerfecto para esos momentos en los que quieres disfrutar al m\u00e1ximo de sabores naturales, pero sin alcohol.\n\nUn aut\u00e9ntico homenaje a Londres, respaldado por generaciones de experiencia de los maestros destiladores de Beefeater, con toda la actitud y el car\u00e1cter que esperas de un gin londinense. \u00a1Salud!"
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "title-spanish_description",
+                "nested_structure": ""
+            }
+        }
+    },
+    "SOCIALS": {
+        "french_meta_post": {
+            "bloc_guidelines": {
+                "french_main_post_text": {
+                    "nb_characters": "125 chars",
+                    "content_guidelines": "The french text of the meta / facebook post to announce the launch of the new Beefeater 0.0 product. Should emphasize the product slogan and no alcohol positioning : Meet Beefeater 0.0. Your new go-to drink for 0.0% of the alcohol, and 100% of the fun. Feel free to add french cultural elements to be appealing to french readers and feel free to be a bit playful.\n",
+                    "reference_content": ""
+                },
+                "french_text_in_the_image": {
+                    "nb_characters": "30",
+                    "content_guidelines": "French text to be added on top of the promotional image of the new Beefeater 0.0 product. The image displays the bottle of the Beefeater 0.0 on a parisian terrasse. Should be concise, catchy, playful, on brand. \n",
+                    "reference_content": ""
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "french_main_post_text-french_text_in_the_image-spanish_main_meta_post_text",
+                "nested_structure": ""
+            }
+        },
+        "french_insta_post": {
+            "bloc_guidelines": {
+                "french_insta_post_text": {
+                    "nb_characters": "125 chars",
+                    "content_guidelines": "The short text for the french instagram post about the new Beefeater 0.0. Should leverage the product slogan \"Your new go-to drink for 0.0% of the alcohol, and 100% of the fun\". Feel free to add french cultural elements to be appealing to the reader. Be playful if you feel it. ",
+                    "reference_content": ""
+                },
+                "french_insta_post_copy_in_the_image": {
+                    "nb_characters": "30 chars",
+                    "content_guidelines": "French text to be displayed in the new Beefeater 0.0 instagram post image. Should be short. Feel free to be playful or to add french cultural element to be appealing to the reader. ",
+                    "reference_content": ""
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "french_insta_post_text-french_insta_post_copy_in_the_image",
+                "nested_structure": ""
+            }
+        },
+        "spanish_meta_post": {
+            "bloc_guidelines": {
+                "spanish_main_meta_post_text": {
+                    "nb_characters": "125 chars",
+                    "content_guidelines": "The spanish text of the meta / facebook post to announce the launch of the new Beefeater 0.0 product. Should emphasize the product slogan and no alcohol positioning : Meet Beefeater 0.0. Your new go-to drink for 0.0% of the alcohol, and 100% of the fun. Feel free to add spanish cultural elements to be appealing to spanish readers and feel free to be a bit playful.",
+                    "reference_content": ""
+                },
+                "spanish_meta_post_text_in_the_image": {
+                    "nb_characters": "30 chars",
+                    "content_guidelines": "Spanish text to be added on top of the promotional image of the new Beefeater 0.0 product. The image displays the bottle of the Beefeater 0.0 on a spanish tapas party terrasse in the afternoon. Should be concise, catchy, playful, on brand.",
+                    "reference_content": ""
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "spanish_main_meta_post_text-spanish_meta_post_text_in_the_image",
+                "nested_structure": ""
+            }
+        },
+        "spanish_instagram_post": {
+            "bloc_guidelines": {
+                "spanish_insta_post_main_text": {
+                    "nb_characters": "125 chars",
+                    "content_guidelines": "The short text for the spanish instagram post about the new Beefeater 0.0. Should leverage the product slogan \"Your new go-to drink for 0.0% of the alcohol, and 100% of the fun\". Feel free to add spanish cultural elements to be appealing to the reader. Be playful if you feel it.",
+                    "reference_content": ""
+                },
+                "spanish_insta_post_text_in_the_image": {
+                    "nb_characters": "30 chars",
+                    "content_guidelines": "Spanish text to be added on top of the promotional image of the new Beefeater 0.0 product. The image displays the bottle of the Beefeater 0.0 on a spanish tapas party terrasse in the afternoon. Should be concise, catchy, playful, on brand.",
+                    "reference_content": ""
+                }
+            },
+            "bloc_data": {},
+            "bloc_structure_string": {
+                "non_nested_structure": "spanish_insta_post_main_text-spanish_insta_post_text_in_the_image",
+                "nested_structure": ""
+            }
+        }
+    }
+}

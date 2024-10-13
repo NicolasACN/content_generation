@@ -71,7 +71,7 @@ import streamlit as st
 # PROMPT_FOLDER_PATH = os.path.join(os.getcwd(), 'prompts')
 # assert os.path.exists(PROMPT_FOLDER_PATH)
 
-def choose_model(model_name: str):
+def choose_model(model_name: str = "4o"):
     if model_name == "3.5":
         return ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
     elif model_name == "4":

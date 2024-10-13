@@ -1,0 +1,31 @@
+{
+    "PDP": {
+        "french_pdp": {
+            "title": "Beefeater 0.0",
+            "french_description": "D\u00e9couvrez Beefeater 0.0, l'alternative sans alcool qui conserve toute l'essence du gin londonien. 0 % d\u2019alcool, mais une explosion de saveurs.\n\nNous avons r\u00e9invent\u00e9 le c\u00e9l\u00e8bre Beefeater London Dry Gin pour offrir une exp\u00e9rience gustative sans compromis. Attendez-vous \u00e0 une symphonie de geni\u00e8vre audacieux et de notes d'agrumes \u00e9clatantes, orange et citron, qui dansent sur votre palais.\n\nFid\u00e8le \u00e0 notre h\u00e9ritage, Beefeater 0.0 est le fruit d'un savoir-faire exceptionnel, adaptant notre processus de distillation traditionnel pour une version sans alcool qui ne manque pas de caract\u00e8re.\n\nPour savourer pleinement chaque instant, servez-le sur glace avec une tranche de citron. Un hommage vibrant \u00e0 Londres, incarnant l'esprit et l'attitude d'un gin authentique. \u00c0 votre sant\u00e9 !"
+        },
+        "spanish_pdp": {
+            "title": "Beefeater 0.0",
+            "spanish_description": "Descubre Beefeater 0.0, tu nueva elecci\u00f3n sin alcohol: 0 % de alcohol, 100 % de sabor. Hemos transformado el legendario Beefeater London Dry Gin en una experiencia sin alcohol que mantiene su esencia: una sinfon\u00eda de sabores. Con un perfil arom\u00e1tico dominado por el enebro, acompa\u00f1ado de nuestras distintivas notas c\u00edtricas de naranja y lim\u00f3n, cada sorbo ofrece una personalidad vibrante y audaz. Perfecto para esos momentos en los que deseas disfrutar de sabores aut\u00e9nticos sin el alcohol. Un verdadero tributo a Londres, respaldado por siglos de maestr\u00eda destiladora de Beefeater, con toda la actitud y car\u00e1cter que esperas de un gin londinense. Sirve con hielo, a\u00f1ade t\u00f3nica y una rodaja de lim\u00f3n para una experiencia refrescante. \u00a1Salud!"
+        }
+    },
+    "SOCIALS": {
+        "french_meta_post": {
+            "french_main_post_text": "Rencontrez Beefeater 0.0. 0% alcool, 100% Londres. Un go\u00fbt audacieux pour vos moments parisiens!",
+            "french_text_in_the_image": "Londres dans un verre!",
+            "spanish_main_meta_post_text": "Descubre Beefeater 0.0. 0% alcohol, 100% Londres. Un sabor audaz para tus momentos vibrantes!"
+        },
+        "french_insta_post": {
+            "french_insta_post_text": "D\u00e9couvrez Beefeater 0.0%: l'esprit de Londres, sans alcool, avec le go\u00fbt audacieux du geni\u00e8vre et des agrumes.",
+            "french_insta_post_copy_in_the_image": "Londres dans un verre!"
+        },
+        "spanish_meta_post": {
+            "spanish_main_meta_post_text": "Descubre Beefeater 0.0: el sabor de Londres sin alcohol, 100% aut\u00e9ntico. \u00a1Brinda con estilo!",
+            "spanish_meta_post_text_in_the_image": "Londres en cada sorbo"
+        },
+        "spanish_instagram_post": {
+            "spanish_insta_post_main_text": "Descubre Beefeater 0.0%: el sabor de Londres, sin alcohol, con toda la esencia. \u00a1Brinda con estilo!",
+            "spanish_insta_post_text_in_the_image": "Londres en cada sorbo"
+        }
+    }
+}

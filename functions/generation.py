@@ -29,6 +29,7 @@ def get_section_data(content_data, page, section=None, instance_name=None):
     #     return section_data
     
 def generate_section(content_data, page, section, content_brief="", reference_examples="", prompt_folder="./reference/prompts", language="British English", project="", role="world recognized copywriter", instance_name=None, cw_guidelines="", brand_knowledge="", intermediate_output_folder="./output/intermediate-output", max_iter=1, model=choose_model("4o"), version=0, max_attempts=2, log_intermediate=False):
+    
     # Load Prompts
     assert os.path.exists(prompt_folder)
     writing_prompt_path = os.path.join(prompt_folder, 'Copywriting')

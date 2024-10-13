@@ -556,8 +556,8 @@ with tab3:
                 print(prompt_folder)
                 print("-------------------")
                 
-                model = choose_model("4-turbo")
-
+                model = choose_model("4o")
+                
                 generated_content = generate_content(
                     content_data=st.session_state['filled_data'], 
                     reference_examples=st.session_state.reference_examples, 

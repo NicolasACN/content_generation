@@ -1,40 +1,40 @@
 {
     "E-MERCH": {
         "HOMEPAGE BANNERS": {
-            "copy_in_image": "Enjoy an exclusive 20% discount with an additional 10% off for ALL members across Europe and North America.",
-            "CTA": "Book Now"
+            "copy_in_image": "Unlock 20% off, plus an extra 10% for ALL members\u2014luxury awaits!",
+            "CTA": "Reserve Now"
         },
         "LANDING PAGE": {
             "title": "Private Flash Sale 2024: 20% Off for Members Only!",
-            "description": "As autumn unveils its palette of vibrant hues, our Private Flash Sale 2024 invites you to immerse yourself in the enchanting landscapes of Europe and North Africa. Experience the allure of the season at a more inviting price. Picture yourself meandering through ancient alleyways, savouring exquisite local dishes, or relaxing in sumptuous surroundings\u2014all with a delightful 20% saving.\n\nThis exclusive offer is available from 23rd to 27th September 2024, for stays between 4th October and 12th November 2024. Tailored for our ALL members, this promotion ensures an unparalleled experience and superb value. Not a member yet? Sign up now to access this special rate and enjoy an additional discount of up to 10% in Europe and North Africa. Moreover, booking through our ALL.com app grants you an extra 20% in Reward points. Act swiftly\u2014this opportunity ends soon. Embark on an enchanting autumn journey with us.",
+            "description": "Embrace the autumnal beauty of Europe and North Africa with our exclusive Private Flash Sale 2024. As the leaves change, so can your surroundings\u2014explore historical sites, indulge in local delicacies, or relax in one of our luxurious hotels. This members-only offer lets you discover these enchanting locales without stretching your budget.\n\nBook between 23rd and 27th September 2024 for stays from 4th October to 12th November and enjoy a substantial 20% discount. Plus, use our ALL.com app to book and receive an extra 20% bonus in Reward points. Act now to make the most of these incredible savings, and remember, ALL members get an additional up to 10% off in Europe and North Africa!",
             "cta_label": "Book now",
             "list_usp_title1": "Autumn Escapes in Europe and North Africa",
-            "list_usp_title2": "Book by 27th September for Exclusive Savings",
+            "list_usp_title2": "Book by 27th September for exclusive savings",
             "list_usp_title3": "Stay from 4th October to 12th November",
-            "list_usp_title4": "Exclusive 20% Off for ALL Members"
+            "list_usp_title4": "Exclusive 20% off for ALL members"
         }
     },
     "SOCIAL ADS": {
         "LINK AD": {
-            "title": "Discover Your Luxurious Autumn Retreat - Enjoy 20% Off",
-            "description": "Exclusive 20% off for ALL members! Book from 23.09 to 27.09 for stays between 4.10 and 12.11.",
+            "title": "Hurry, Unlock 20% Off! Book Your Autumn Escape in Europe & North Africa",
+            "description": "DIVE INTO AUTUMN: Enjoy 20% off + extra perks. Immerse yourself in the vibrant hues and crisp air of Europe and North Africa. Limited-time offer from 23.09 to 27.09, for stays between 4.10 and 12.11.",
             "catchy_slogan": "Autumn Adventures Await!",
-            "cta": "Book Now on ALL.com"
+            "cta": "Book Now Exclusively on ALL.com"
         },
         "META CAROUSEL": {
             "title": "Unlock Exclusive Savings! 20% Off for ALL Members Across Europe & North Africa",
-            "copy_on_image1": "20% OFF FOR ALL MEMBERS! Book with an extra bonus on the ALL.com app.",
-            "catchy_slogan1": "Unlock Exclusive Savings!",
+            "copy_on_image1": "EXCLUSIVE 20% OFF - MEMBERS ONLY",
+            "catchy_slogan1": "Unlock Luxury for Less",
             "cta1": "BOOK NOW on ALL.com",
-            "copy_on_image2": "DON'T MISS OUT! Secure an additional 10% off in Europe and North Africa.",
-            "catchy_slogan2": "Your Next Adventure, For Less!",
+            "copy_on_image2": "ADDITIONAL 10% OFF IN EUROPE & NA",
+            "catchy_slogan2": "More Savings, More Travel",
             "cta2": "DISCOVER MORE on ALL.com",
-            "copy_on_image3": "LAST CHANCE! Secure your spot with 20% off.",
-            "catchy_slogan3": "Hurry, Book Your Stay!",
-            "cta3": "JOIN & SAVE on ALL.com",
-            "copy_on_blue_background": "MEMBERS ONLY: 20% OFF YOUR STAY",
-            "catchy_slogan4": "Book. Stay. Save.",
-            "cta4": "EXPLORE DEALS on ALL.com"
+            "copy_on_image3": "Exclusive App Rewards Await You",
+            "catchy_slogan3": "Earn While You Explore",
+            "cta3": "GET THE APP & SAVE",
+            "copy_on_blue_background": "20% OFF YOUR NEXT ADVENTURE",
+            "catchy_slogan4": "Travel More, Save More",
+            "cta4": "JOIN & SAVE on ALL.com"
         }
     }
 }

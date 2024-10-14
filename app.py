@@ -9,8 +9,10 @@ import shutil
 import json
 from flask import Flask, request, jsonify
 from models.objectModels import Project
+from functions.old.data_processing import fill_hotel_data
 from models.requestModels import CreateProjectResponse
-from functions.utils import extract_brand_knowledge, extract_copywriting_guidelines
+from functions.utils import choose_model, extract_brand_knowledge, extract_copywriting_guidelines
+from functions.generation import generate_content
 
 app = Flask(__name__)
 
@@ -96,13 +98,7 @@ def load_project_details(project_name: str):
         copywriting_guidelines=load_data_file(project_name, "copywriting", "copywriting_guidelines")
         reference_examples=load_data_file(project_name, "reference_examples", "reference_examples")
         role=load_data_file(project_name, "role", "role")
-        
-        # Load brief
-        brief = ""
-        brief_path = os.path.join(project_path, "data", "content", "brief", "brief.txt")
-        if os.path.exists(brief_path):
-            with open(brief_path, "r") as f:
-                brief = f.read()
+        brief=load_data_file(project_name,"brief","brief")
     
         # Simulated logic for loading project details, replace with actual logic
         # For example, load data from a database or file based on the project name
@@ -112,8 +108,7 @@ def load_project_details(project_name: str):
             "brief": brief,
             "role" : role,
             "brand_knowledge" : brand_knowledge,
-            "copywriting_guidelines" : copywriting_guidelines,
-            "brand_knowledge" : brand_knowledge
+            "copywriting_guidelines" : copywriting_guidelines
         }
     except Exception as e:
         raise RuntimeError(f"Failed to load project details: {str(e)}")
@@ -121,6 +116,8 @@ def load_project_details(project_name: str):
 # Functions to load data files like brand knowledge, copywriting guidelines, reference examples and role
 def load_data_file(project_name, folderName, fileName):
     path = os.path.join(os.getcwd(), "projects", project_name, "data", folderName, f"{fileName}.txt")
+    if not os.path.exists(path):
+        path = os.path.join(os.getcwd(), "projects", project_name, "data", folderName, fileName, f"{fileName}.txt")
     if os.path.exists(path):
         with open(path, "r") as f:
             return f.read()
@@ -261,6 +258,49 @@ def get_data(project_id, template_id):
 
     # Return the data
     return data
+
+
+# Function to initiate content generation for a given project and template ID
+def generate_content_function(project_id, template_id):
+    # Define the path for the project and template
+    template_path = os.path.join(os.getcwd(), "projects", project_id, "content", template_id)
+    
+    # Check if the template directory exists
+    if not os.path.exists(template_path):
+        raise FileNotFoundError(f"Template '{template_id}' not found for project '{project_id}'")
+    
+    # Define the paths for saving content and prompts
+    save_path = os.path.join(os.getcwd(), "projects", project_id, "content", template_id, "output")
+    os.makedirs(save_path, exist_ok=True)
+    prompt_folder = os.path.join(os.getcwd(), "projects", project_id, "prompts")
+            
+    # Debug information
+    print("PROMPT FOLDER")
+    print(prompt_folder)
+    print("-------------------")
+            
+    # Choose the model for content generation
+    model = choose_model("4-turbo")
+
+    content_data=fill_hotel_data(get_content_structure(project_id, template_id), get_data(project_id, template_id))
+
+    # Generate the content using the generate_content function
+    generated_content = generate_content(
+            content_data=content_data, 
+            reference_examples=load_data_file(project_id, "reference_examples", "reference_examples"), 
+            role=load_data_file(project_id, "role", "role"), 
+            project=project_id, 
+            prompt_folder=prompt_folder, 
+            brand_knowledge=load_data_file(project_id, "brand_data", "brand_knowledge"), 
+            cw_guidelines=load_data_file(project_id, "copywriting", "copywriting_guidelines"), 
+            model=model,
+            content_brief=load_data_file(project_id,"content","brief")  # Pass the brief here
+        )    
+    # Save Generated Content
+    with open(os.path.join(save_path, 'generated_content.json'), 'w') as f:
+        json.dump(generated_content, f, indent=4)
+    print(f"Generating content for template '{template_id}'")
+    return generated_content
 
 
 #####################################
@@ -496,6 +536,23 @@ def get_data_api(project_id, template_id):
         return jsonify({"error": str(e)}), 404
     except Exception as e:
         return jsonify({"error": f"Failed to retrieve data: {str(e)}"}), 500
+
+
+# API endpoint to initiate content generation
+@app.route('/api/projects/<project_id>/templates/<template_id>/generate', methods=['POST'])
+def generate_content_api(project_id, template_id):
+    try:
+        
+        # Call the generate_content function
+        generated_content=generate_content_function(project_id, template_id)
+        
+        # Return a success response
+        return jsonify({"message": "Content generation initiated.", "content": generated_content}), 200
+    except FileNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": f"Failed to initiate content generation: {str(e)}"}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080,debug=True)

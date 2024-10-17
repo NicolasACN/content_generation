@@ -64,15 +64,15 @@ def create_project_structure(project_name, project_brief):
 def get_all_projects():
     projects_list = []
     projects_dir = os.path.join(os.getcwd(), "projects")
-
+    
     if os.path.exists(projects_dir):
         projects = [d for d in os.listdir(projects_dir) if os.path.isdir(os.path.join(projects_dir, d))]
         for projectName in projects:
-            brief_path = os.path.join(os.getcwd(), "projects", projectName, "data", "content", "brief", "brief.txt")
+            brief_path = os.path.join(os.getcwd(), "projects", projectName, "data", "project_info", "project_brief.txt")
             # verification de l'existance du fichier
             if os.path.exists(brief_path):
                 # lecture et extraction du contenu du fichier
-                with open(brief_path, "r", encoding='utf-8') as f:
+                with open(brief_path, "r", encoding='ISO-8859-1') as f:
                     content = f.read()
 
                 project = Project() 

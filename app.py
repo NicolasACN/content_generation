@@ -7,12 +7,15 @@
 import os
 import shutil
 import json
+import requests
+
 from flask import Flask, request, jsonify
 from models.objectModels import Project
 from functions.old.data_processing import fill_hotel_data
 from models.requestModels import CreateProjectResponse
 from functions.utils import choose_model, extract_brand_knowledge, extract_copywriting_guidelines
 from functions.generation import generate_content
+
 
 app = Flask(__name__)
 
@@ -21,6 +24,70 @@ app = Flask(__name__)
 #             Fonctions             #
 #                                   #
 #####################################
+
+# Centralized concatenation function
+def concatenate_content(label, content_list):
+    if label == "reference_examples":
+        concatenated_docs = "\n\n---\n\nEXAMPLE:\n".join(content_list)
+        return "EXAMPLE:\n" + concatenated_docs
+    else:
+        return "\n\n---\n\n".join(content_list)
+    
+# Helper function to fetch content from URLs
+def fetch_content_from_url(url):
+    try:
+        print(f"Fetching content from URL: {url}")
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+        }
+        # Add timeout to handle long responses
+        response = requests.get(url, headers=headers, timeout=10)
+
+        print(f"Response status code: {response.status_code}")
+        
+        if response.status_code == 200:
+            return response.text
+        else:
+            return f"Failed to fetch content from {url} (Status: {response.status_code})"
+    except requests.exceptions.Timeout:
+        return f"Error: Request to {url} timed out."
+    except requests.exceptions.RequestException as e:
+        return f"Error fetching content from {url}: {str(e)}"
+    
+# Function to handle file processing based on label
+def handle_file_content(files, label):
+    if files and len(files) > 0:
+        try:
+            file_contents = [file.read().decode("utf-8") for file in files]
+            return concatenate_content(label, file_contents)
+        except Exception as e:
+            raise ValueError(f"Failed to process files: {str(e)}")
+        
+# Function to handle URL content based on label
+def handle_url_content(urls, label):
+    if urls and len(urls) > 0:
+        try:
+            url_contents = [fetch_content_from_url(url) for url in urls if url.strip()]
+            return concatenate_content(label, url_contents)
+        except Exception as e:
+            raise ValueError(f"Failed to process URLs: {str(e)}")
+
+# Function to extract and process unified content
+def extract_and_update_content(projectName, label, combined_content):
+    if label == "brand_knowledge":
+        digested_content = extract_brand_knowledge(combined_content)
+        update_data_file(digested_content, projectName, "brand_data", label)
+        return digested_content
+    if label == "copywriting_guidelines":
+        digested_content = extract_copywriting_guidelines(combined_content)
+        update_data_file(digested_content, projectName, "copywriting", label)
+        return digested_content
+    elif label == "reference_examples":
+        digested_content = concatenate_content("reference_examples", [combined_content])
+        update_data_file(digested_content, projectName, "reference_examples", label)
+        return digested_content
+    else:
+        raise ValueError(f"Unknown label: {label}")
 
 # Function to create project directory structure
 def create_project_structure(project_name, project_brief):
@@ -274,7 +341,7 @@ def generate_content_function(project_id, template_id):
     os.makedirs(save_path, exist_ok=True)
     prompt_folder = os.path.join(os.getcwd(), "projects", project_id, "prompts")
             
-    # Debug information
+    # Debug informationx
     print("PROMPT FOLDER")
     print(prompt_folder)
     print("-------------------")
@@ -349,49 +416,62 @@ def get_project_details(project_id):
         # Return a general HTTP 500 error for any unexpected issues
         return jsonify({"error": "An unexpected error occurred"}), 500
 
-# Endpoint pour upload un fichier brand knowledge
-@app.route('/api/project/<projectName>/brand-knowledge', methods=['POST'])
-def load_brand_knowledge(projectName):
-    # Vérifie si un fichier a été envoyé
-    if 'files' not in request.files:
-        return jsonify({"erreur": "pas de fichier dans la requête"}), 400
-    
-    files = request.files.getlist('files')
+# Unified Endpoint for handling files, URLs, and existing project content
+@app.route('/api/project/<projectName>/<label>/digest-content', methods=['POST'])
+def digest_content(projectName, label):
+    combined_content = []
 
-    # Vérifie si des fichiers ont été sélectionnés
-    if len(files) == 0:
-        return jsonify({"erreur": "aucun fichier selectionnés"}), 400
-    
-    try: 
-        concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in files]) # Boucle sur chaque fichier
-        digested_content = extract_brand_knowledge(concatenated_docs)
-        update_data_file(digested_content, projectName, "brand_data", "brand_knowledge")
-    except Exception as e:
-        return jsonify({"error": f"Failed to update brand knowledge: {str(e)}"}), 500
-    
-    return jsonify({"message": f"Brand knowledge uploaded successfully."}), 200
+    # Step 1: Handle file content
+    if 'files' in request.files:
+        files = request.files.getlist('files')
+        file_content = handle_file_content(files, label)
+        if file_content:
+            combined_content.append(file_content)
 
-# Endpoint pour upload un fichier copywriting guidelines
-@app.route('/api/project/<projectName>/copywriting-guidelines', methods=['POST'])
-def load_copywriting_guidelines(projectName):
-    # Vérifie si un fichier a été envoyé
-    if 'files' not in request.files:
-        return jsonify({"erreur": "pas de fichier dans la requête"}), 400
-    
-    files = request.files.getlist('files')
+    # Step 2: Handle URL content and projectSource from JSON or form-data
+    data = None
 
-    # Vérifie si des fichiers ont été sélectionnés
-    if len(files) == 0:
-        return jsonify({"erreur": "aucun fichier selectionnés"}), 400
-    
-    try: 
-        concatenated_docs = "\n\n---\n\n".join([file.read().decode("utf-8") for file in files]) # Boucle sur chaque fichier
-        digested_content = extract_copywriting_guidelines(concatenated_docs)
-        update_data_file(digested_content, projectName, "copywriting", "copywriting_guidelines")
-    except Exception as e:
-        return jsonify({"error": f"Failed to update copywriting guidelines: {str(e)}"}), 500
+    if request.is_json:
+        data = request.get_json()  # Extract from JSON
+    else:
+        data = request.form  # Extract from form-data
 
-    return jsonify({"message": f"Copywriting guidelines uploaded successfully."}), 200
+    # Handle URL content
+    urls = data.get('urls', None)
+    if urls:
+        try:
+            urls_list = urls if isinstance(urls, list) else eval(urls)  # Safely parse stringified JSON in form-data
+            url_content = handle_url_content(urls_list, label)
+            if url_content:
+                combined_content.append(url_content)
+        except Exception as e:
+            return jsonify({"error": f"Failed to process URLs: {str(e)}"}), 500
+
+    # Handle project content using projectSource
+    project_id = data.get('projectSource')
+    print(project_id)
+    if project_id:
+        try:
+            project_content = load_project_details(project_id).get(label)
+            print(load_project_details(project_id))
+            if project_content:
+                combined_content.append(project_content)
+        except Exception as e:
+            return jsonify({"error": f"Failed to fetch project content: {str(e)}"}), 500
+
+    # Step 3: Combine all content with the separator
+    if combined_content:
+        unified_content = concatenate_content(label, combined_content)
+
+        # Step 4: Extract and process the unified content
+        try:
+            digested_content = extract_and_update_content(projectName, label, unified_content)
+        except Exception as e:
+            return jsonify({"error": f"Failed to process unified content: {str(e)}"}), 500
+
+        return jsonify({"message": f"{label} updated successfully with combined content", "data": digested_content}), 200
+    else:
+        return jsonify({"error": "No content to process. Please provide URLs, files, or projectSource."}), 400
 
 # Endpoint pour upload un fichier reference examples
 @app.route('/api/project/<projectName>/reference-examples', methods=['POST'])

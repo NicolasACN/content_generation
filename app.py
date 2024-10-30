@@ -8,6 +8,7 @@ import os
 import shutil
 import json
 import requests
+from bs4 import BeautifulSoup
 
 from flask import Flask, request, jsonify
 from models.objectModels import Project
@@ -24,6 +25,7 @@ app = Flask(__name__)
 #             Fonctions             #
 #                                   #
 #####################################
+ALLOWED_LABELS = ["brand_knowledge", "copywriting_guidelines", "reference_examples", "role", "brief"]
 
 # Centralized concatenation function
 def concatenate_content(label, content_list):
@@ -46,7 +48,22 @@ def fetch_content_from_url(url):
         print(f"Response status code: {response.status_code}")
         
         if response.status_code == 200:
-            return response.text
+            # Parse the HTML content using BeautifulSoup
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Remove all script and style elements
+            for script_or_style in soup(["script", "style"]):
+                script_or_style.decompose()  # Remove these tags from the DOM
+
+            # Extract paragraphs (<p>) from the body
+            paragraphs = soup.find_all('p')
+
+            # Join all paragraph text content, filtering out short or irrelevant sentences
+            body_content = "\n\n".join(
+                [p.get_text(strip=True) for p in paragraphs if len(p.get_text(strip=True)) > 50]
+            )
+
+            return body_content
         else:
             return f"Failed to fetch content from {url} (Status: {response.status_code})"
     except requests.exceptions.Timeout:
@@ -82,12 +99,9 @@ def extract_and_update_content(projectName, label, combined_content):
         digested_content = extract_copywriting_guidelines(combined_content)
         update_data_file(digested_content, projectName, "copywriting", label)
         return digested_content
-    elif label == "reference_examples":
-        digested_content = concatenate_content("reference_examples", [combined_content])
-        update_data_file(digested_content, projectName, "reference_examples", label)
-        return digested_content
     else:
-        raise ValueError(f"Unknown label: {label}")
+        update_data_file(combined_content, projectName, label, label)
+        return combined_content
 
 # Function to create project directory structure
 def create_project_structure(project_name, project_brief):
@@ -165,7 +179,7 @@ def load_project_details(project_name: str):
         copywriting_guidelines=load_data_file(project_name, "copywriting", "copywriting_guidelines")
         reference_examples=load_data_file(project_name, "reference_examples", "reference_examples")
         role=load_data_file(project_name, "role", "role")
-        brief=load_data_file(project_name,"brief","brief")
+        brief=load_data_file(project_name,"content\\brief","brief")
     
         # Simulated logic for loading project details, replace with actual logic
         # For example, load data from a database or file based on the project name
@@ -175,6 +189,7 @@ def load_project_details(project_name: str):
             "brief": brief,
             "role" : role,
             "brand_knowledge" : brand_knowledge,
+            "reference_examples" : reference_examples,
             "copywriting_guidelines" : copywriting_guidelines
         }
     except Exception as e:
@@ -183,8 +198,6 @@ def load_project_details(project_name: str):
 # Functions to load data files like brand knowledge, copywriting guidelines, reference examples and role
 def load_data_file(project_name, folderName, fileName):
     path = os.path.join(os.getcwd(), "projects", project_name, "data", folderName, f"{fileName}.txt")
-    if not os.path.exists(path):
-        path = os.path.join(os.getcwd(), "projects", project_name, "data", folderName, fileName, f"{fileName}.txt")
     if os.path.exists(path):
         with open(path, "r") as f:
             return f.read()
@@ -326,7 +339,6 @@ def get_data(project_id, template_id):
     # Return the data
     return data
 
-
 # Function to initiate content generation for a given project and template ID
 def generate_content_function(project_id, template_id):
     # Define the path for the project and template
@@ -419,6 +431,9 @@ def get_project_details(project_id):
 # Unified Endpoint for handling files, URLs, and existing project content
 @app.route('/api/project/<projectName>/<label>/digest-content', methods=['POST'])
 def digest_content(projectName, label):
+    if label not in ALLOWED_LABELS:
+        return jsonify({"error": f"Invalid label '{label}'. Allowed values are {', '.join(ALLOWED_LABELS)}."}), 400
+
     combined_content = []
 
     # Step 1: Handle file content
@@ -449,11 +464,9 @@ def digest_content(projectName, label):
 
     # Handle project content using projectSource
     project_id = data.get('projectSource')
-    print(project_id)
     if project_id:
         try:
             project_content = load_project_details(project_id).get(label)
-            print(load_project_details(project_id))
             if project_content:
                 combined_content.append(project_content)
         except Exception as e:
@@ -461,7 +474,7 @@ def digest_content(projectName, label):
 
     # Step 3: Combine all content with the separator
     if combined_content:
-        unified_content = concatenate_content(label, combined_content)
+        unified_content = "\n\n---\n\n".join(combined_content)
 
         # Step 4: Extract and process the unified content
         try:
@@ -473,44 +486,30 @@ def digest_content(projectName, label):
     else:
         return jsonify({"error": "No content to process. Please provide URLs, files, or projectSource."}), 400
 
-# Endpoint pour upload un fichier reference examples
-@app.route('/api/project/<projectName>/reference-examples', methods=['POST'])
-def load_reference_examples(projectName):
-    # Vérifie si un fichier a été envoyé
-    if 'files' not in request.files:
-        return jsonify({"erreur": "pas de fichier dans la requête"}), 400
-    
-    files = request.files.getlist('files')
-
-    # Vérifie si des fichiers ont été sélectionnés
-    if len(files) == 0:
-        return jsonify({"erreur": "aucun fichier selectionnés"}), 400
-    
-    try: 
-        concatenated_docs = "\n\n---\n\nEXAMPLE:\n".join([file.read().decode("utf-8") for file in files]) # Boucle sur chaque fichier
-        digested_content = "EXAMPLE:\n" + concatenated_docs
-        update_data_file(digested_content, projectName, "reference_examples", "reference_examples")
-    except Exception as e:
-        return jsonify({"error": f"Failed to update reference examples: {str(e)}"}), 500
-
-    return jsonify({"message": f"Reference examples uploaded successfully."}), 200
-
 # Endpoint pour save les Copywriting Role
-@app.route('/api/project/<projectName>/role', methods=['POST'])
-def load_copywriting_role(projectName):
-    data = request.get_json()
-    role = data.get('role')
+@app.route('/api/project/<projectName>/<label>/update', methods=['POST'])
+def update_project(projectName,label):
+    if label not in ALLOWED_LABELS:
+        return jsonify({"error": f"Invalid label '{label}'. Allowed values are {', '.join(ALLOWED_LABELS)}."}), 400
     
-    # Vérifie si un fichier a été envoyé
-    if not role:
-        return jsonify({"erreur": "paramétre 'role' obligatoire"}), 400
+    data = request.get_json()
+    value = data.get('data').get(label)
+    folderName = label
+    if not value:
+        return jsonify({"erreur": "valeur de ${label} est obligatoire"}), 400
     
     try: 
-        update_data_file(role, projectName, "role", "role")
+        if label == "brand_knowledge":
+            folderName = "brand_data"
+        elif label == "copywriting_guidelines":
+            folderName = "copywriting"
+        elif label == "brief":
+            folderName = "content\\brief"
+        update_data_file(value, projectName, folderName, label)
     except Exception as e:
         return jsonify({"error": f"Failed to update reference examples: {str(e)}"}), 500
 
-    return jsonify({"message": f"Copywriting role saved successfully."}), 200
+    return jsonify({"message": f"{label} saved successfully."}), 200
 
 # API endpoint to create a new template
 @app.route('/api/projects/<project_id>/templates', methods=['POST'])
@@ -616,7 +615,6 @@ def get_data_api(project_id, template_id):
         return jsonify({"error": str(e)}), 404
     except Exception as e:
         return jsonify({"error": f"Failed to retrieve data: {str(e)}"}), 500
-
 
 # API endpoint to initiate content generation
 @app.route('/api/projects/<project_id>/templates/<template_id>/generate', methods=['POST'])

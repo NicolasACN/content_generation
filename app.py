@@ -230,6 +230,29 @@ def create_template(project_id, template_name):
     with open(os.path.join(new_template_path, 'content_data', 'filled_data.json'), 'w') as f:
         json.dump({}, f)
 
+def import_templates_from_another_project(projectSrc_id, projectDest_id):
+    src_path = os.path.join(os.getcwd(), "projects", projectSrc_id, "content")
+    dest_path = os.path.join(os.getcwd(), "projects", projectDest_id, "content")
+
+     # Vérifier si le dossier source existe
+    if not os.path.exists(src_path):
+        raise FileNotFoundError(f"Le dossier source '{src_path}' n'existe pas.")
+
+    if not os.path.exists(dest_path):
+        raise FileNotFoundError(f"Le dossier source '{dest_path}' n'existe pas.")
+
+    # Parcourir tous les fichiers et sous-dossiers dans le dossier source
+    for item in os.listdir(src_path):
+        src_file = os.path.join(src_path, item)
+        dest_file = os.path.join(dest_path, item)
+
+        # Copier les fichiers et dossiers
+        if os.path.isdir(src_file):
+            shutil.copytree(src_file, dest_file, dirs_exist_ok=True)  # Copier récursivement les dossiers
+        else:
+            shutil.copy2(src_file, dest_file)  # Copier les fichiers avec leurs métadonnées
+
+
 # Function to get all templates for a given project
 def get_templates(project_id):
     # Define the path for the templates based on the project ID
@@ -549,6 +572,25 @@ def create_new_template(project_id):
         return jsonify(response), 201
     except Exception as e:
         return jsonify({"error": f"Failed to create template: {str(e)}"}), 500
+
+@app.route('/api/project/importTemplates', methods=['POST'])
+def import_template():
+    # Get the request data
+    data = request.get_json()
+    src_project = data.get('src_project')
+    dest_project = data.get('dest_project')
+    
+    if not src_project:
+        return jsonify({"error": "src_project is required"}), 400
+    
+    if not dest_project:
+        return jsonify({"error": "dest_project is required"}), 400
+    
+    try:
+        import_templates_from_another_project(src_project, dest_project)
+        return jsonify({"message": "Templates imported successfully."}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to import template: {str(e)}"}), 500
 
 # API endpoint to get templates for a project
 @app.route('/api/projects/<project_id>/templates', methods=['GET'])

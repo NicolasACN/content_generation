@@ -339,6 +339,24 @@ def get_data(project_id, template_id):
     # Return the data
     return data
 
+# Function to get generated content for a given project and in optional the template ID
+def get_content(project_id, template_id):
+    content_path = os.path.join(os.getcwd(), "projects", project_id, "content")
+    
+    if not template_id:
+        folders = [d for d in os.listdir(content_path) if os.path.isdir(os.path.join(content_path, d))]
+        if folders:
+            template_id=folders[0]
+    
+    path = os.path.join(content_path, template_id, "output", "generated_content.json")
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            return f.read()
+    else:
+        raise FileNotFoundError(f"Content not found for template '{template_id}' in project '{project_id}'")
+    
+        
+
 # Function to initiate content generation for a given project and template ID
 def generate_content_function(project_id, template_id):
     # Define the path for the project and template
@@ -631,6 +649,21 @@ def generate_content_api(project_id, template_id):
     except Exception as e:
         return jsonify({"error": f"Failed to initiate content generation: {str(e)}"}), 500
 
+# API endpoint to get Generated Content
+@app.route('/api/projects/<project_id>/content', methods=['GET'])
+def get_generated_content(project_id):
+    try:
+        template_id = request.args.get('template_id') 
+        # Call the get_content function
+        content = get_content(project_id, template_id)
+        return jsonify({"data": content}), 200
+    except FileNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve data: {str(e)}"}), 500
+
+        
+        
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080,debug=True)

@@ -116,6 +116,25 @@ This tab allows you to manage content templates, create and structure content, i
 
 ---
 
+
+## How To Use The App in API mode ?
+
+### 1. Project Setup
+
+- Get the sources and install the app as indicated above.
+
+- Check that you are on the git branch "poc_api" which contains the modifications to make the app work in API mode
+
+- In a command prompt, enter the command above which creates an alias to launch the app on the APP.py file: 
+set FLASK_APP=app.py
+
+### 2. Launch Project
+
+- still in command prompt execute the command to place yourself in the content_generation directory: 
+cd C:\Projects\moliere\content_generation
+
+- Execute the flask run command to start the app
+
 Happy Content Creating! ✍️
 
 *This app is a JJJAM'N Creation.*
